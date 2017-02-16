@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+#Extras
+roadNet-CA.dot
+roadNet-CA.txt
+roadNet-CA-noattr.dot
