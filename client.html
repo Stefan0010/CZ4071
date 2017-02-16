@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Client</title>
+</head>
+
+<body>
+
+</body>
+
+<script type="text/javascript">
+    var host = 'localhost'
+    var port = 8888
+    var ws = new WebSocket('ws://' + host + ':' + port)
+    ws.onopen = function (event) {
+        ws.send('Hello world!')
+    }
+    ws.onclose = function (event) {
+
+    }
+    ws.onmessage = function (event) {
+
+    }
+    ws.onerror = function (event) {
+
+    }
+</script>
+
+</html>
