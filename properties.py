@@ -33,8 +33,9 @@ def plotClustCf(graph):
 	base = 'ccf.' + fileName
 	ext = ['.plt' , '.tab', '.png']
 
+	result = [ os.path.abspath(base + i) for i in ext ]
 	os.chdir('..')
-	return [ os.path.abspath(base + i) for i in ext ]
+	return result
 
 def plotSccDistr(graph):
 	path = 'scc/'
@@ -51,8 +52,9 @@ def plotSccDistr(graph):
 	base = 'scc.' + fileName
 	ext = ['.plt' , '.tab', '.png']
 
+	result = [ os.path.abspath(base + i) for i in ext ]
 	os.chdir('..')
-	return [ os.path.abspath(base + i) for i in ext ]
+	return result
 
 def plotWccDistr(graph):
 	path = 'wcc/'
@@ -69,8 +71,9 @@ def plotWccDistr(graph):
 	base = 'wcc.' + fileName
 	ext = ['.plt' , '.tab', '.png']
 
+	result = [ os.path.abspath(base + i) for i in ext ]
 	os.chdir('..')
-	return [ os.path.abspath(base + i) for i in ext ]
+	return result
 
 def plotInDegDistr(graph):
 	path = 'indeg/'
@@ -87,8 +90,9 @@ def plotInDegDistr(graph):
 	base = 'inDeg.' + fileName
 	ext = ['.plt' , '.tab', '.png']
 
+	result = [ os.path.abspath(base + i) for i in ext ]
 	os.chdir('..')
-	return [ os.path.abspath(base + i) for i in ext ]
+	return result
 
 def plotOutDegDistr(graph):
 	path = 'outdeg/'
@@ -105,5 +109,6 @@ def plotOutDegDistr(graph):
 	base = 'outDeg.' + fileName
 	ext = ['.plt' , '.tab', '.png']
 
+	result = [ os.path.abspath(base + i) for i in ext ]
 	os.chdir('..')
-	return [ os.path.abspath(base + i) for i in ext ]
+	return result
