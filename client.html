@@ -7,24 +7,36 @@
 
 <body>
 
+<input id="input_file" type="text" />
+<button id="load_graph">Load graph</button>
+
 </body>
 
 <script type="text/javascript">
-    var host = 'localhost'
-    var port = 8888
-    var ws = new WebSocket('ws://' + host + ':' + port)
-    ws.onopen = function (event) {
-        ws.send('Hello world!')
-    }
-    ws.onclose = function (event) {
+var input_file = document.getElementById('input_file')
 
-    }
-    ws.onmessage = function (event) {
+var host = 'localhost'
+var port = 8888
+var ws = new WebSocket('ws://' + host + ':' + port)
+ws.onopen = function (event) {
+    ws.send('Hello world!')
+}
 
-    }
-    ws.onerror = function (event) {
+ws.onclose = function (event) {
 
-    }
+}
+
+ws.onmessage = function (event) {
+
+}
+
+ws.onerror = function (event) {
+
+}
+
+document.getElementById('load_graph').addEventListener('click', function (event) {
+    
+})
 </script>
 
 </html>

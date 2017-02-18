@@ -1,3 +1,7 @@
+import sys
+
+from twisted.python import log
+from twisted.internet import reactor
 from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerFactory
 
 class MyServerProtocol(WebSocketServerProtocol):
@@ -8,6 +12,10 @@ class MyServerProtocol(WebSocketServerProtocol):
         print("WebSocket connection open.")
 
     def onMessage(self, payload, isBinary):
+        # obj = json.loads(payload.decode('utf8'))
+        # payload = s.encode('utf8')
+        # self.sendMessage(payload, isBinary = False)
+
         if isBinary:
             print("Binary message received: {0} bytes".format(len(payload)))
         else:
@@ -22,19 +30,13 @@ class MyServerProtocol(WebSocketServerProtocol):
 host = 'localhost'
 port = 8888
 
-if __name__ == '__main__':
-    import sys
+log.startLogging(sys.stdout)
 
-    from twisted.python import log
-    from twisted.internet import reactor
+factory = WebSocketServerFactory('ws://%s:%d' % (host, port))
+factory.protocol = MyServerProtocol
+# factory.setProtocolOptions(maxConnections=2)
 
-    log.startLogging(sys.stdout)
+# note to self: if using putChild, the child must be bytes...
 
-    factory = WebSocketServerFactory('ws://%s:%d' % (host, port))
-    factory.protocol = MyServerProtocol
-    # factory.setProtocolOptions(maxConnections=2)
-
-    # note to self: if using putChild, the child must be bytes...
-
-    reactor.listenTCP(port, factory)
-    reactor.run()
+reactor.listenTCP(port, factory)
+reactor.run()

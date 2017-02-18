@@ -1,0 +1,25 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+#include <cstdlib>
+#include <ctype>
+
+using namespace std;
+
+int main(int argc, char* argv[]) {
+	if(argc != 3) {
+		fprintf(stderr, "Usage: %s IN_FILE OUT_FILE\n", argv[0]);
+		return EXIT_FAILURE;
+	}
+	
+	FILE * fin = fopen(argv[1], "r");
+	
+	char buffer[256];
+	while(fgets(buffer, 256, fin)) {
+		char *buffer_ptr = buffer
+		while(isspace(*buffer_ptr)) ++buffer_ptr;
+		if(*buffer_ptr == '#') continue;
+		
+		
+	}
+}
