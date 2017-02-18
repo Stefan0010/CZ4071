@@ -1,0 +1,10 @@
+#
+# Undirected graph - scc distribution. G(10000, 14813). Largest component has 0.900200 nodes (Sat Feb 18 15:49:53 2017)
+#
+# Size of strongly connected component	Number of components
+2	352
+3	66
+4	11
+5	9
+7	1
+9002	1
