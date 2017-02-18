@@ -1,0 +1,15 @@
+#
+# Undirected graph - in-degree Distribution. G(10000, 10000). 3195 (0.3195) nodes with in-deg > avg deg (2.0), 503 (0.0503) with >2*avg.deg (Sat Feb 18 14:43:55 2017)
+#
+# In-degree	Count
+0	1273
+1	2772
+2	2760
+3	1796
+4	896
+5	343
+6	112
+7	42
+8	1
+9	3
+10	2
