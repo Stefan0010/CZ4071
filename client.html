@@ -10,6 +10,7 @@
 
 <input id="input_file" type="text" />
 <button id="load_graph">Load graph</button>
+<button id="gen_scale_free">Gen. scale-free network</button>
 <button id="get_properties">Get properties</button>
 <img src="" id="plot_loader" width="1366" height="768" />
 
@@ -23,7 +24,8 @@ var port = 8888
 var ws = new WebSocket(protocol + '://' + host + ':' + port)
 
 window.addEventListener('beforeunload', function (event) {
-    ws.close(1000, 'Client disconnected')
+    if(ws.readyState != ws.CLOSED)
+        ws.close(1000, 'Client disconnected')
 })
 
 var current_status = {
@@ -37,25 +39,28 @@ var input_file = document.getElementById('input_file')
 input_file.value = 'L:/roadNet-CA.txt'
 
 var load_graph = document.getElementById('load_graph')
+var gen_scale_free = document.getElementById('gen_scale_free')
 var get_properties = document.getElementById('get_properties')
 var plot_list = []
 var show_idx = 0
 
 ///////////////////////////////////////////////////
 function wait() {
-    current_status['WAIT'] = true;
+    current_status['WAIT'] = true
 
     input_file.disabled = true
     load_graph.disabled = true
     get_properties.disabled = true
+    gen_scale_free.disabled = true
 }
 
 function unwait() {
-    current_status['WAIT'] = false;
+    current_status['WAIT'] = false
 
     input_file.disabled = false
     load_graph.disabled = false
     get_properties.disabled = false
+    gen_scale_free.disabled = false
 }
 
 document.addEventListener('keypress', function (event) {
@@ -77,11 +82,16 @@ function plot() {
 function parse_return(value) {
     switch(current_status['PREV_CMD']) {
         case 'LOAD_GRAPH':
-            alert('Graph is loaded')
+            alert('Graph is loaded!')
             break
         case 'GET_PROPERTIES':
             plot_list = value
             plot()
+            break
+        case 'GEN_SCALE_FREE':
+            alert('Scale free graph is loaded!')
+            break
+        default:
             break
     }
 }
@@ -122,6 +132,24 @@ get_properties.addEventListener('click', function (event) {
 
     wait()
     current_status['PREV_CMD'] = 'GET_PROPERTIES'
+})
+
+gen_scale_free.addEventListener('click', function (event) {
+    if(!current_status['CONNECTED'])
+        return
+
+    if(current_status['WAIT']) {
+        alert('Please wait for previous command to finish!')
+        return
+    }
+
+    ws.send(JSON.stringify({
+        'cmd': 'GEN_SCALE_FREE',
+        'args': []
+    }))
+
+    wait()
+    current_status['PREV_CMD'] = 'GEN_SCALE_FREE'
 })
 
 ws.onopen = function (event) {

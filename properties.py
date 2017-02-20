@@ -5,9 +5,13 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
+plt.rcParams['figure.figsize'] = (16, 9)
+
 def loadGraph(fileDir):
-	graph = snap.LoadEdgeList(snap.PUNGraph, fileDir, 0, 1)
-	return graph
+	return snap.LoadEdgeList(snap.PUNGraph, fileDir, 0, 1)
+
+def genScaleFree(N=10000, gamma=2.5):
+	return snap.GenRndPowerLaw(N, gamma)
 
 def saveGraph(graph):
 	path = 'temp/'
@@ -116,7 +120,7 @@ def plotInDegDistr(graph):
 
 	plt.clf()
 	plt.figure(1)
-	plt.subplots_adjust(left=0.1, bottom=0.1, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
 	plt.xlim(tmp_arr[:, 0].min(), tmp_arr[:, 0].max())
@@ -158,7 +162,7 @@ def plotOutDegDistr(graph):
 
 	plt.clf()
 	plt.figure(1)
-	plt.subplots_adjust(left=0.1, bottom=0.1, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
 	plt.xlim(tmp_arr[:, 0].min(), tmp_arr[:, 0].max())

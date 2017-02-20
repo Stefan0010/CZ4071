@@ -25,6 +25,11 @@ class MyServerProtocol(WebSocketServerProtocol):
 
         data = json.loads(payload.decode('utf8'))
 
+        if 'cmd' not in data or 'args' not in data:
+            # Reject
+            print 'Rejected! Message does not contain the keys \'cmd\' and \'args\'.'
+            return
+
         if data['cmd'] == 'LOAD_GRAPH':
             print 'Loading graph: %s' % data['args'][0]
             self.memory['graph'] = helper.loadGraph(data['args'][0])
@@ -55,6 +60,16 @@ class MyServerProtocol(WebSocketServerProtocol):
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
                 'value': out_arr
+                }).encode('utf8'), False)
+
+        elif data['cmd'] == 'GEN_SCALE_FREE':
+            print 'Generating scale-free network'
+            self.memory['graph'] = helper.genScaleFree(N=10000)
+
+            print 'Scale-free network is successfully generated'
+            self.sendMessage(json.dumps({
+                'type': 'RETURN',
+                'value': 0,
                 }).encode('utf8'), False)
 
         else:
