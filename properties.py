@@ -10,11 +10,11 @@ def loadGraph(fileDir):
 	return graph
 
 def saveGraph(graph):
-	path = 'dot/'
-	if os.path.exists(path):
-		shutil.rmtree(path)
+	path = 'temp/'
+	# if os.path.exists(path):
+	# 	shutil.rmtree(path)
 
-	os.mkdir(path)
+	# os.mkdir(path)
 
 	filePath = path + 'graph.dot'
 
@@ -22,62 +22,71 @@ def saveGraph(graph):
 	return os.path.abspath(filePath)
 
 def plotClustCf(graph):
-	path = 'cf/'
+	path = 'temp/'
 
-	if os.path.exists(path):
-		shutil.rmtree(path)
+	# if os.path.exists(path):
+	# 	shutil.rmtree(path)
 
-	os.mkdir(path)
+	# os.mkdir(path)
 	os.chdir(path)
 
 	fileName = 'clust_coeff'
 
 	snap.PlotClustCf(graph, fileName, "Clustering Coefficient")
 
-	base = 'ccf.' + fileName
-	ext = ['.plt' , '.tab', '.png']
+	base = path + 'ccf.' + fileName
 
-	result = [ os.path.abspath(base + i) for i in ext ]
+	# ext = ['.plt' , '.tab', '.png']
+	# result = [ os.path.abspath(base + i) for i in ext ]
+
 	os.chdir('..')
-	return result
+
+	# return result
+	return os.path.abspath(base + '.png')
 
 def plotSccDistr(graph):
-	path = 'scc/'
+	path = 'temp/'
 
-	if os.path.exists(path):
-		shutil.rmtree(path)
+	# if os.path.exists(path):
+	# 	shutil.rmtree(path)
 
-	os.mkdir(path)
+	# os.mkdir(path)
 	os.chdir(path)
 
 	fileName = 'scc'
 	snap.PlotSccDistr(graph, fileName, "Strongly Connected Component")
 
-	base = 'scc.' + fileName
-	ext = ['.plt' , '.tab', '.png']
+	base = path + 'scc.' + fileName
 
-	result = [ os.path.abspath(base + i) for i in ext ]
+	# ext = ['.plt' , '.tab', '.png']
+	# result = [ os.path.abspath(base + i) for i in ext ]
+
 	os.chdir('..')
-	return result
+
+	# return result
+	return os.path.abspath(base + '.png')
 
 def plotWccDistr(graph):
-	path = 'wcc/'
+	path = 'temp/'
 
-	if os.path.exists(path):
-		shutil.rmtree(path)
+	# if os.path.exists(path):
+	# 	shutil.rmtree(path)
 
-	os.mkdir(path)
+	# os.mkdir(path)
 	os.chdir(path)
 
 	fileName = 'wcc'
-	snap.PlotSccDistr(graph, fileName, "Weakly Connected Component")
+	snap.PlotWccDistr(graph, fileName, "Weakly Connected Component")
 
-	base = 'wcc.' + fileName
-	ext = ['.plt' , '.tab', '.png']
+	base = path + 'wcc.' + fileName
 
-	result = [ os.path.abspath(base + i) for i in ext ]
+	# ext = ['.plt' , '.tab', '.png']
+	# result = [ os.path.abspath(base + i) for i in ext ]
+
 	os.chdir('..')
-	return result
+
+	# return result
+	return os.path.abspath(base + '.png')
 
 def plotInDegDistr(graph):
 	# path = 'indeg/'
@@ -107,11 +116,13 @@ def plotInDegDistr(graph):
 
 	plt.clf()
 	plt.figure(1)
-	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.1, bottom=0.1, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
 	plt.xlim(tmp_arr[:, 0].min(), tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
+	plt.xlabel('In-degrees')
+	plt.ylabel('Number of nodes')
 	plt.savefig(out_fname, dpi=300, format='png')
 
 	# os.chdir('..')
@@ -120,7 +131,7 @@ def plotInDegDistr(graph):
 	return os.path.abspath(out_fname)
 
 def plotOutDegDistr(graph):
-	# outdir = 'outdeg/'
+	outdir = 'temp/'
 
 	# if os.path.exists(outdir):
 	# 	shutil.rmtree(outdir)
@@ -147,11 +158,13 @@ def plotOutDegDistr(graph):
 
 	plt.clf()
 	plt.figure(1)
-	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.1, bottom=0.1, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
 	plt.xlim(tmp_arr[:, 0].min(), tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
+	plt.xlabel('Out-degrees')
+	plt.ylabel('Number of nodes')
 	plt.savefig(out_fname, dpi=300, format='png')
 
 	# os.chdir('..')

@@ -4,28 +4,68 @@ from twisted.python import log
 from twisted.internet import reactor
 from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerFactory
 
-class MyServerProtocol(WebSocketServerProtocol):
-    def onConnect(self, request):
-        print("Client connecting: {0}".format(request.peer))
+import json
+import properties as helper
 
+class MyServerProtocol(WebSocketServerProtocol):
     def onOpen(self):
         print("WebSocket connection open.")
 
+    def onConnect(self, request):
+        # I have no idea if this is a good practice
+        self.memory = {}
+
+        print("Client connecting: {0}".format(request.peer))
+
     def onMessage(self, payload, isBinary):
-        # obj = json.loads(payload.decode('utf8'))
-        # payload = s.encode('utf8')
-        # self.sendMessage(payload, isBinary = False)
 
+        # Not handling binary data
         if isBinary:
-            print("Binary message received: {0} bytes".format(len(payload)))
-        else:
-            print("Text message received: {0}".format(payload.decode('utf8')))
+            return
 
-        # echo back message verbatim
-        self.sendMessage(payload, isBinary)
+        data = json.loads(payload.decode('utf8'))
+
+        if data['cmd'] == 'LOAD_GRAPH':
+            print 'Loading graph: %s' % data['args'][0]
+            self.memory['graph'] = helper.loadGraph(data['args'][0])
+
+            print 'Graph %s loaded!' % data['args'][0]
+            self.sendMessage(json.dumps({
+                'type': 'RETURN',
+                'value': 0,
+                }).encode('utf8'), False)
+
+        elif data['cmd'] == 'GET_PROPERTIES':
+            if 'graph' not in self.memory:
+                self.sendMessage(json.dumps({
+                    'type': 'ERROR',
+                    'value': 'No graph is loaded yet!'
+                    }).encode('utf8'), False)
+
+                return
+
+            graph = self.memory['graph']
+            out_arr = []
+            out_arr.append(helper.plotInDegDistr(graph))
+            out_arr.append(helper.plotOutDegDistr(graph))
+            out_arr.append(helper.plotSccDistr(graph))
+            out_arr.append(helper.plotWccDistr(graph))
+            out_arr.append(helper.plotClustCf(graph))
+
+            self.sendMessage(json.dumps({
+                'type': 'RETURN',
+                'value': out_arr
+                }).encode('utf8'), False)
+
+        else:
+            self.sendMessage(json.dumps({
+                'type': 'ERROR',
+                'value': 'Unknown command error!'
+                }).encode('utf8'), False)
 
     def onClose(self, wasClean, code, reason):
         print("WebSocket connection closed: {0}".format(reason))
+
 
 host = 'localhost'
 port = 8888

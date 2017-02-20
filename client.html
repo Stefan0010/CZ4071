@@ -3,40 +3,156 @@
 <head>
     <meta charset="utf-8" />
     <title>Client</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
 
 <input id="input_file" type="text" />
 <button id="load_graph">Load graph</button>
+<button id="get_properties">Get properties</button>
+<img src="" id="plot_loader" width="1366" height="768" />
 
 </body>
 
 <script type="text/javascript">
-var input_file = document.getElementById('input_file')
-
+///////////////////////////////////////////////////
+var protocol = 'ws'
 var host = 'localhost'
 var port = 8888
-var ws = new WebSocket('ws://' + host + ':' + port)
-ws.onopen = function (event) {
-    ws.send('Hello world!')
+var ws = new WebSocket(protocol + '://' + host + ':' + port)
+
+window.addEventListener('beforeunload', function (event) {
+    ws.close(1000, 'Client disconnected')
+})
+
+var current_status = {
+    'CONNECTED': false,
+    'WAIT': false,
+    'PREV_CMD': null,
 }
 
-ws.onclose = function (event) {
+///////////////////////////////////////////////////
+var input_file = document.getElementById('input_file')
+input_file.value = 'L:/roadNet-CA.txt'
 
+var load_graph = document.getElementById('load_graph')
+var get_properties = document.getElementById('get_properties')
+var plot_list = []
+var show_idx = 0
+
+///////////////////////////////////////////////////
+function wait() {
+    current_status['WAIT'] = true;
+
+    input_file.disabled = true
+    load_graph.disabled = true
+    get_properties.disabled = true
+}
+
+function unwait() {
+    current_status['WAIT'] = false;
+
+    input_file.disabled = false
+    load_graph.disabled = false
+    get_properties.disabled = false
+}
+
+document.addEventListener('keypress', function (event) {
+    if(event.keyCode == 39) {
+        show_idx = (show_idx + 1) % plot_list.length;
+        plot_loader.src = 'file:///' + plot_list[show_idx]
+    }
+    else if(event.keyCode == 37) {
+        show_idx = (show_idx + plot_list.length - 1) % plot_list.length
+        plot_loader.src = 'file:///' + plot_list[show_idx]
+    }
+})
+
+function plot() {
+    show_idx = 0;
+    plot_loader.src = 'file:///' + plot_list[show_idx]
+}
+
+function parse_return(value) {
+    switch(current_status['PREV_CMD']) {
+        case 'LOAD_GRAPH':
+            alert('Graph is loaded')
+            break
+        case 'GET_PROPERTIES':
+            plot_list = value
+            plot()
+            break
+    }
+}
+
+///////////////////////////////////////////////////
+
+load_graph.addEventListener('click', function (event) {
+    if(!current_status['CONNECTED'])
+        return
+
+    if(current_status['WAIT']) {
+        alert('Please wait for previous command to finish!')
+        return
+    }
+
+    ws.send(JSON.stringify({
+        'cmd': 'LOAD_GRAPH',
+        'args': [input_file.value],
+    }))
+
+    wait()
+    current_status['PREV_CMD'] = 'LOAD_GRAPH'
+})
+
+get_properties.addEventListener('click', function (event) {
+    if(!current_status['CONNECTED'])
+        return
+
+    if(current_status['WAIT']) {
+        alert('Please wait for previous command to finish!')
+        return
+    }
+
+    ws.send(JSON.stringify({
+        'cmd': 'GET_PROPERTIES',
+        'args': []
+    }))
+
+    wait()
+    current_status['PREV_CMD'] = 'GET_PROPERTIES'
+})
+
+ws.onopen = function (event) {
+    current_status['CONNECTED'] = true
 }
 
 ws.onmessage = function (event) {
+    var data = JSON.parse(event.data)
 
+    unwait()
+    switch(data['type']) {
+        case 'RETURN':
+            parse_return(data['value'])
+            break
+
+        case 'ERROR':
+            alert(data['value'])
+            break
+
+        default:
+            break
+    }
+}
+
+ws.onclose = function (event) {
+    // Do nothing
 }
 
 ws.onerror = function (event) {
-
+    alert('An error has occurred. It is advised to reload the page.')
 }
-
-document.getElementById('load_graph').addEventListener('click', function (event) {
-    
-})
 </script>
 
 </html>
