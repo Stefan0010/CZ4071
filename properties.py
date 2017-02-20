@@ -14,6 +14,9 @@ def loadGraph(fileDir):
 def genScaleFree(N=10000, gamma=2.5):
 	return snap.GenRndPowerLaw(N, gamma)
 
+def genRandomGraph(N=10000, prob=0.0005):
+	return snap.GenRndGnm(snap.PUNGraph, N, int(prob * N * (N - 1) / 2), False)
+
 def saveGraph(graph):
 	path = 'temp/'
 	# if os.path.exists(path):
@@ -47,6 +50,11 @@ def degCorr(graph):
 	knn = {}
 	for u in graph.Nodes():
 		ki = u.GetDeg()
+
+		# Isolated nodes
+		if ki == 0:
+			continue
+
 		ksum = 0.
 		for i in range(ki):
 			vid = u.GetNbrNId(i)
@@ -236,6 +244,7 @@ def plotOutDegDistr(graph):
 	return os.path.abspath(out_fname)
 
 if __name__ == '__main__':
-	g = loadGraph('roadNet-CA.txt')
+	# g = loadGraph('roadNet-CA.txt')
 	# g = genScaleFree(N=10000)
+	g = genRandomGraph()
 	plotDegCorr(g)
