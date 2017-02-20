@@ -4,6 +4,7 @@ import shutil
 import numpy as np
 
 import matplotlib.pyplot as plt
+from subprocess import Popen, PIPE
 
 plt.rcParams['figure.figsize'] = (16, 9)
 
@@ -24,6 +25,64 @@ def saveGraph(graph):
 
 	snap.SaveGViz(graph, filePath)
 	return os.path.abspath(filePath)
+
+def plotGraph(graph):
+	if graph.GetNodes() > 10000:
+		return None
+
+	filename = saveGraph(graph)
+	outfname = 'temp/graph.png'
+	p_args = ['sfdp', '-Tpng', '-Gsize="10,10!"', '-Gdpi=72',
+		'-Npenwidth=0.2', '-Nwidth=0.01', '-Nheight=0.01',
+		'-Epenwidth=0.1', '-Nshape=ellipse', '-Nlabel=',
+		'-Gsplines=false', '-Goverlap=false', filename, '-o' + outfname]
+
+	print ' '.join(p_args)
+	p = Popen(p_args)
+	retcode = p.wait()
+
+	return os.path.abspath(outfname)
+
+def degCorr(graph):
+	knn = {}
+	for u in graph.Nodes():
+		ki = u.GetDeg()
+		ksum = 0.
+		for i in range(ki):
+			vid = u.GetNbrNId(i)
+			ksum += graph.GetNI(vid).GetDeg()
+		ksum = ksum / ki
+
+		if ki not in knn:
+			knn[ki] = []
+		knn[ki].append(ksum)
+
+	knn_arr = []
+	for ki in knn:
+		# Is this correct?
+		knn_arr.append( (ki, sum(knn[ki]) / len(knn[ki])) )
+	knn_ndarr = np.array(knn_arr, dtype=float)
+
+	sorted_ks = np.argsort(knn_ndarr[:, 0])
+	knn_ndarr = knn_ndarr[sorted_ks]
+	return knn_ndarr
+
+def plotDegCorr(graph):
+	out_fname = os.path.join('temp', 'degcorrdistr.png')
+	knn = degCorr(graph)
+	plt.clf()
+	plt.figure(1)
+	plt.plot(knn[:, 0], knn[:, 1], '-x')
+	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
+	plt.xlim(knn[:, 0].min(), knn[:, 0].max())
+	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
+	plt.xlabel('k')
+	plt.ylabel('k_nn')
+	plt.yscale('log')
+	plt.savefig(out_fname, dpi=300, format='png')
+	# plt.show()
+
+	return out_fname
 
 def plotClustCf(graph):
 	path = 'temp/'
@@ -178,5 +237,5 @@ def plotOutDegDistr(graph):
 
 if __name__ == '__main__':
 	g = loadGraph('roadNet-CA.txt')
-	plotInDegDistr(g)
-	plotOutDegDistr(g)
+	# g = genScaleFree(N=10000)
+	plotDegCorr(g)

@@ -12,6 +12,7 @@
 <button id="load_graph">Load graph</button>
 <button id="gen_scale_free">Gen. scale-free network</button>
 <button id="get_properties">Get properties</button>
+<button id="plot_graph">Plot graph</button>
 <img src="" id="plot_loader" width="1366" height="768" />
 
 </body>
@@ -41,7 +42,8 @@ input_file.value = 'L:/roadNet-CA.txt'
 var load_graph = document.getElementById('load_graph')
 var gen_scale_free = document.getElementById('gen_scale_free')
 var get_properties = document.getElementById('get_properties')
-var plot_list = []
+var plot_graph = document.getElementById('plot_graph')
+var im_paths = []
 var show_idx = 0
 
 ///////////////////////////////////////////////////
@@ -52,6 +54,7 @@ function wait() {
     load_graph.disabled = true
     get_properties.disabled = true
     gen_scale_free.disabled = true
+    plot_graph.disabled = true
 }
 
 function unwait() {
@@ -61,36 +64,42 @@ function unwait() {
     load_graph.disabled = false
     get_properties.disabled = false
     gen_scale_free.disabled = false
+    plot_graph.disabled = false
 }
 
 document.addEventListener('keypress', function (event) {
     if(event.keyCode == 39) {
-        show_idx = (show_idx + 1) % plot_list.length;
-        plot_loader.src = 'file:///' + plot_list[show_idx]
+        show_idx = (show_idx + 1) % im_paths.length;
+        plot_loader.src = 'file:///' + im_paths[show_idx]
     }
     else if(event.keyCode == 37) {
-        show_idx = (show_idx + plot_list.length - 1) % plot_list.length
-        plot_loader.src = 'file:///' + plot_list[show_idx]
+        show_idx = (show_idx + im_paths.length - 1) % im_paths.length
+        plot_loader.src = 'file:///' + im_paths[show_idx]
     }
 })
 
 function plot() {
-    show_idx = 0;
-    plot_loader.src = 'file:///' + plot_list[show_idx]
+    plot_loader.src = im_paths[show_idx]
 }
 
 function parse_return(value) {
     switch(current_status['PREV_CMD']) {
         case 'LOAD_GRAPH':
+            show_idx = 0
+            im_paths = []
             alert('Graph is loaded!')
             break
         case 'GET_PROPERTIES':
-            plot_list = value
+            im_paths = im_paths.concat(value)
             plot()
             break
         case 'GEN_SCALE_FREE':
             alert('Scale free graph is loaded!')
             break
+        case 'PLOT_GRAPH':
+            alert('Graph is successfully plotted!')
+            im_paths = im_paths.concat(value)
+            plot()
         default:
             break
     }
@@ -150,6 +159,24 @@ gen_scale_free.addEventListener('click', function (event) {
 
     wait()
     current_status['PREV_CMD'] = 'GEN_SCALE_FREE'
+})
+
+plot_graph.addEventListener('click', function (event) {
+    if(!current_status['CONNECTED'])
+        return
+
+    if(current_status['WAIT']) {
+        alert('Please wait for previous command to finish!')
+        return
+    }
+
+    ws.send(JSON.stringify({
+        'cmd': 'PLOT_GRAPH',
+        'args': []
+    }))
+
+    wait()
+    current_status['PREV_CMD'] = 'PLOT_GRAPH'
 })
 
 ws.onopen = function (event) {
