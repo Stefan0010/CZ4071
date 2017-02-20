@@ -14,7 +14,7 @@ def loadGraph(fileDir):
 def genScaleFree(N=10000, gamma=2.5):
 	return snap.GenRndPowerLaw(N, gamma)
 
-def genRandomGraph(N=10000, prob=0.0005):
+def genRandomGraph(N=10000, prob=0.002):
 	return snap.GenRndGnm(snap.PUNGraph, N, int(prob * N * (N - 1) / 2), False)
 
 def saveGraph(graph):
@@ -82,7 +82,8 @@ def plotDegCorr(graph):
 	plt.figure(1)
 	plt.plot(knn[:, 0], knn[:, 1], '-x')
 	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
-	plt.xlim(knn[:, 0].min(), knn[:, 0].max())
+	plt.xticks(np.arange(knn[:, 0].max()))
+	plt.xlim(0, knn[:, 0].max())
 	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
 	plt.xlabel('k')
 	plt.ylabel('k_nn')
@@ -190,7 +191,8 @@ def plotInDegDistr(graph):
 	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
-	plt.xlim(tmp_arr[:, 0].min(), tmp_arr[:, 0].max())
+	plt.xticks(np.arange(tmp_arr[:, 0].max()))
+	plt.xlim(0, tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
 	plt.xlabel('In-degrees')
 	plt.ylabel('Number of nodes')
@@ -232,7 +234,8 @@ def plotOutDegDistr(graph):
 	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
-	plt.xlim(tmp_arr[:, 0].min(), tmp_arr[:, 0].max())
+	plt.xticks(np.arange(tmp_arr[:, 0].max()))
+	plt.xlim(0, tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
 	plt.xlabel('Out-degrees')
 	plt.ylabel('Number of nodes')
@@ -246,5 +249,5 @@ def plotOutDegDistr(graph):
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
 	# g = genScaleFree(N=10000)
-	g = genRandomGraph()
+	g = genRandomGraph(N=10000, prob=0.001)
 	plotDegCorr(g)
