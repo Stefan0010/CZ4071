@@ -85,13 +85,13 @@ def plotDegCorr(graph):
 	plt.xticks(np.arange(knn[:, 0].max()))
 	plt.xlim(0, knn[:, 0].max())
 	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
-	plt.xlabel('k')
+	plt.xlabel('Degree')
 	plt.ylabel('k_nn')
 	plt.yscale('log')
 	plt.savefig(out_fname, dpi=300, format='png')
 	# plt.show()
 
-	return out_fname
+	return os.path.abspath(out_fname)
 
 def plotClustCf(graph):
 	path = 'temp/'

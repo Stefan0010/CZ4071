@@ -79,7 +79,7 @@ document.addEventListener('keypress', function (event) {
 })
 
 function plot() {
-    plot_loader.src = im_paths[show_idx]
+    plot_loader.src = 'file:///' + im_paths[show_idx]
 }
 
 function parse_return(value) {

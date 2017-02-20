@@ -51,11 +51,19 @@ class MyServerProtocol(WebSocketServerProtocol):
 
             graph = self.memory['graph']
             out_arr = []
+            print 'Plotting in-degree distribution'
             out_arr.append(helper.plotInDegDistr(graph))
+            print 'Plotting out-degree distribution'
             out_arr.append(helper.plotOutDegDistr(graph))
+            print 'Plotting SCC distribution'
             out_arr.append(helper.plotSccDistr(graph))
+            print 'Plotting WCC distribution'
             out_arr.append(helper.plotWccDistr(graph))
+            print 'Plotting cluster coefficient'
             out_arr.append(helper.plotClustCf(graph))
+            print 'Plotting degree correlation distribution'
+            out_arr.append(helper.plotDegCorr(graph))
+            print 'Finished plotting!'
 
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
@@ -70,6 +78,33 @@ class MyServerProtocol(WebSocketServerProtocol):
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
                 'value': 0,
+                }).encode('utf8'), False)
+
+        elif data['cmd'] == 'PLOT_GRAPH':
+            # Load a graph beforehand!
+            if 'graph' not in self.memory:
+                self.sendMessage(json.dumps({
+                    'type': 'ERROR',
+                    'value': 'No graph is loaded yet!'
+                    }).encode('utf8'), False)
+
+                return
+
+            graph = self.memory['graph']
+            fout_name = helper.plotGraph(graph)
+
+            # Graph is too big
+            if fout_name is None:
+                self.sendMessage(json.dumps({
+                    'type': 'ERROR',
+                    'value': 'Graph is too big!'
+                    }).encode('utf8'), False)
+
+                return
+
+            self.sendMessage(json.dumps({
+                'type': 'RETURN',
+                'value': [fout_name],
                 }).encode('utf8'), False)
 
         else:
