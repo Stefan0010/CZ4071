@@ -310,9 +310,9 @@ def plotOutDegDistr(graph):
 
 def getDegCentr(graph):
 	# CD(n)
-	nid = snap.GetMxDegNId(g)
-	CDn = snap.GetDegreeCentr(g, nid)
-	n = g.GetNI(snap.GetMxDegNId(g)).GetDeg()
+	nid = snap.GetMxDegNId(graph)
+	CDn = snap.GetDegreeCentr(graph, nid)
+	n = graph.GetNI(snap.GetMxDegNId(graph)).GetDeg()
 
 	freeman_nom = 0
 
