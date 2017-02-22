@@ -6,6 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from subprocess import Popen, PIPE
 
+import scipy.stats
+
 plt.rcParams['figure.figsize'] = (16, 9)
 MAX_XTICKS_NUM = 25
 
@@ -92,7 +94,7 @@ def plotDegCorr(graph):
 		plt.xticks(np.arange(knn[:, 0].max() + 1))
 
 	plt.xlim(0, knn[:, 0].max())
-	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
+	plt.ylim(knn[:, 0].min(), knn[:, 1].max())
 	plt.xlabel('Degree', fontsize=16)
 	plt.ylabel('k_nn', fontsize=16)
 	plt.yscale('log')
@@ -247,7 +249,7 @@ def plotInDegDistr(graph):
 		plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
 
 	plt.xlim(0, tmp_arr[:, 0].max())
-	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
+	plt.ylim(0, tmp_arr[:, 1].max())
 	plt.xlabel('In-degrees', fontsize=16)
 	plt.ylabel('Number of nodes', fontsize=16)
 	plt.grid(True)
@@ -297,7 +299,7 @@ def plotOutDegDistr(graph):
 		plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
 
 	plt.xlim(0, tmp_arr[:, 0].max())
-	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
+	plt.ylim(0, tmp_arr[:, 1].max())
 	plt.xlabel('Out-degrees', fontsize=16)
 	plt.ylabel('Number of nodes', fontsize=16)
 	plt.grid(True)
@@ -330,8 +332,23 @@ def numOfTriangles(graph):
 		result += pair.Val1()
 	return result
 
+def getLambda(graph):
+	tmp_arr = []
+	out_arr = snap.TIntPrV()
+	snap.GetDegCnt(graph, out_arr)
+	for item in out_arr:
+		deg = item.GetVal1()
+		num = item.GetVal2()
+		tmp_arr.append(np.full((num,), deg))
+
+	degs = np.concatenate(tmp_arr, axis=0)
+	loc, scale = scipy.stats.expon.fit(degs, floc=degs.min())
+
+	return scale
+
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
-	g = genScaleFree(N=5000, gamma=2.7777)
+	g = genScaleFree(N=5000, gamma=2.1111)
 	# g = genRandomGraph(N=5000, prob=0.0005)
-	print plotGraph(g)
+	# print plotGraph(g)
+	print getLambda(g)
