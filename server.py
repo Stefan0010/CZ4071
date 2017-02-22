@@ -63,6 +63,14 @@ class MyServerProtocol(WebSocketServerProtocol):
             out_arr.append(helper.plotClustCf(graph))
             print 'Plotting degree correlation distribution'
             out_arr.append(helper.plotDegCorr(graph))
+
+            print 'Plotting shortest path distribution'
+            result = helper.plotSPDistr(graph)
+            if result is None:
+                print 'Failed: Graph is too big to plot shortest path distribution'
+            else:
+                out_arr.append(result)
+
             print 'Finished plotting!'
 
             self.sendMessage(json.dumps({
@@ -72,7 +80,7 @@ class MyServerProtocol(WebSocketServerProtocol):
 
         elif data['cmd'] == 'GEN_SCALE_FREE':
             print 'Generating scale-free network'
-            self.memory['graph'] = helper.genScaleFree(N=10000)
+            self.memory['graph'] = helper.genScaleFree(N=10000, gamma=2.3333)
 
             print 'Scale-free network is successfully generated'
             self.sendMessage(json.dumps({

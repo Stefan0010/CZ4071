@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from subprocess import Popen, PIPE
 
 plt.rcParams['figure.figsize'] = (16, 9)
+MAX_XTICKS_NUM = 25
 
 def loadGraph(fileDir):
 	return snap.LoadEdgeList(snap.PUNGraph, fileDir, 0, 1)
@@ -82,7 +83,14 @@ def plotDegCorr(graph):
 	plt.figure(1)
 	plt.plot(knn[:, 0], knn[:, 1], '-x')
 	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
-	plt.xticks(np.arange(knn[:, 0].max()))
+
+
+	if knn[:, 0].max() > MAX_XTICKS_NUM:
+		skip = int(knn[:, 0].max()) / MAX_XTICKS_NUM
+		plt.xticks( np.arange(0, knn[:, 0].max() + 1 + skip, skip) )
+	else:
+		plt.xticks(np.arange(knn[:, 0].max() + 1))
+
 	plt.xlim(0, knn[:, 0].max())
 	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
 	plt.xlabel('Degree', fontsize=16)
@@ -231,7 +239,13 @@ def plotInDegDistr(graph):
 	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
-	plt.xticks(np.arange(tmp_arr[:, 0].max()))
+
+	if tmp_arr[:, 0].max() > MAX_XTICKS_NUM:
+		skip = int(tmp_arr[:, 0].max()) / MAX_XTICKS_NUM
+		plt.xticks( np.arange(0, tmp_arr[:, 0].max() + 1 + skip, skip) )
+	else:
+		plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
+
 	plt.xlim(0, tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
 	plt.xlabel('In-degrees', fontsize=16)
@@ -275,7 +289,13 @@ def plotOutDegDistr(graph):
 	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
-	plt.xticks(np.arange(tmp_arr[:, 0].max()))
+
+	if tmp_arr[:, 0].max() > MAX_XTICKS_NUM:
+		skip = int(tmp_arr[:, 0].max()) / MAX_XTICKS_NUM
+		plt.xticks( np.arange(0, tmp_arr[:, 0].max() + 1 + skip, skip) )
+	else:
+		plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
+
 	plt.xlim(0, tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
 	plt.xlabel('Out-degrees', fontsize=16)
