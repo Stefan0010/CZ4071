@@ -95,3 +95,4 @@ roadNet-CA.txt
 roadNet-CA-noattr.dot
 *.exe
 temp/
+!temp/foo.txt
