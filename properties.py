@@ -81,13 +81,14 @@ def plotDegCorr(graph):
 	plt.clf()
 	plt.figure(1)
 	plt.plot(knn[:, 0], knn[:, 1], '-x')
-	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 	plt.xticks(np.arange(knn[:, 0].max()))
 	plt.xlim(0, knn[:, 0].max())
 	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
-	plt.xlabel('Degree')
-	plt.ylabel('k_nn')
+	plt.xlabel('Degree', fontsize=16)
+	plt.ylabel('k_nn', fontsize=16)
 	plt.yscale('log')
+	plt.grid(True)
 	plt.savefig(out_fname, dpi=300, format='png')
 	# plt.show()
 
@@ -104,11 +105,12 @@ def plotSPDistr(graph):
 
 	temp_list = []
 	while True:
-		line = p.stdin.readline()
+		line = p.stdout.readline()
 		if line == '':
 			break
 
 		line_splits = line.split(',')
+
 		dst = int(line_splits[0])
 		num = int(line_splits[1])
 		temp_list.append((dst, num))
@@ -121,10 +123,11 @@ def plotSPDistr(graph):
 	plt.plot(spdistr_arr[:, 0], spdistr_arr[:, 1], '-x')
 	plt.xlim([0, spdistr_arr[:, 0].max()])
 	plt.ylim([0, spdistr_arr[:, 1].max()])
-	plt.xlabel('Shortest path length', fontsize=24)
-	plt.ylabel('Number of nodes', fontsize=24)
-	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
-
+	plt.xticks( np.arange(spdistr_arr[:, 0].max()+1) )
+	plt.xlabel('Shortest path length', fontsize=16)
+	plt.ylabel('Number of nodes', fontsize=16)
+	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
+	plt.grid(True)
 	out_fname = os.path.join('temp', 'spdistr.png')
 	plt.savefig(out_fname, dpi=300, format='png')
 
@@ -225,14 +228,15 @@ def plotInDegDistr(graph):
 
 	plt.clf()
 	plt.figure(1)
-	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
 	plt.xticks(np.arange(tmp_arr[:, 0].max()))
 	plt.xlim(0, tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
-	plt.xlabel('In-degrees')
-	plt.ylabel('Number of nodes')
+	plt.xlabel('In-degrees', fontsize=16)
+	plt.ylabel('Number of nodes', fontsize=16)
+	plt.grid(True)
 	plt.savefig(out_fname, dpi=300, format='png')
 
 	# os.chdir('..')
@@ -268,14 +272,15 @@ def plotOutDegDistr(graph):
 
 	plt.clf()
 	plt.figure(1)
-	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
 	plt.yscale('log')
 	plt.xticks(np.arange(tmp_arr[:, 0].max()))
 	plt.xlim(0, tmp_arr[:, 0].max())
 	plt.ylim(tmp_arr[:, 1].min(), tmp_arr[:, 1].max())
-	plt.xlabel('Out-degrees')
-	plt.ylabel('Number of nodes')
+	plt.xlabel('Out-degrees', fontsize=16)
+	plt.ylabel('Number of nodes', fontsize=16)
+	plt.grid(True)
 	plt.savefig(out_fname, dpi=300, format='png')
 
 	# os.chdir('..')
@@ -285,6 +290,6 @@ def plotOutDegDistr(graph):
 
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
-	# g = genScaleFree(N=10000)
-	g = genRandomGraph(N=10000, prob=0.001)
+	# g = genScaleFree(N=5000)
+	g = genRandomGraph(N=5000, prob=0.0005)
 	print plotSPDistr(g)
