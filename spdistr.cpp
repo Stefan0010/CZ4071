@@ -47,12 +47,16 @@ void bfs(const int &start_node) {
 }
 
 int main(int argc, char* argv[]) {
-	if(argc != 3) {
-		fprintf(stderr, "Usage: %s IN_FILE OUT_FILE\n", argv[0]);
-		return EXIT_FAILURE;
-	}
+	fprintf(stderr, "Usage: %s\n", argv[0]);
+	fputs("OR", stderr);
+	fprintf(stderr, "Usage: %s IN_FILE\n", argv[0]);
+	fputs("OR", stderr);
+	fprintf(stderr, "Usage: %s IN_FILE OUT_FILE\n", argv[0]);
 	
-	FILE * fin = fopen(argv[1], "r");
+	FILE * fin;
+	if(argc == 1) {
+		fin = stdin;
+	} else fin = fopen(argv[1], "r");
 	
 	char buffer[256];
 	memset(mapper, 0xFF, sizeof mapper);
@@ -82,13 +86,16 @@ int main(int argc, char* argv[]) {
 			max_dist = max(max_dist, dist[u]);
 		}
 		
-		printf("Completed: %.6f%%\n", (float) (start_node + 1) / num_nodes * 100.);
+		fprintf(stderr, "Completed: %.6f%%\n", (float) (start_node + 1) / num_nodes * 100.);
 	}
 	
-	FILE * fout = fopen(argv[2], "w");
+	FILE * fout;
+	if(argc < 3) {
+		fout = stdout;
+	} else fout = fopen(argv[2], "w");
+
 	for(int d = 1; d <= max_dist; ++d) {
 		fprintf(fout, "%d,%d\n", d, cum_dist[d]);
 	}
-	
 	return 0;
 }
