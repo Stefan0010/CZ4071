@@ -8,12 +8,54 @@
 
 <body>
 
-<input id="input_file" type="text" />
-<button id="load_graph">Load graph</button>
-<button id="gen_scale_free">Gen. scale-free network</button>
-<button id="get_properties">Get properties</button>
-<button id="plot_graph">Plot graph</button>
-<img src="" id="plot_loader" width="1366" height="768" />
+<div id="panel">
+    <div id="panel_container">
+        <input id="input_file" type="text" />
+        <button id="load_graph">Load graph</button>
+        <button id="gen_scale_free">Gen. scale-free network</button>
+        <button id="get_properties">Get properties</button>
+        <button id="plot_graph">Plot graph</button>
+    </div>
+    <button id="hide_panel">&hellip;</button>
+</div>
+
+<div id="prop_container">
+    <button id="hide_table">&hellip;</button>
+    <table id="prop_table" border="1" style="border-collapse: collapse; width: 100%;">
+        <tbody>
+            <tr>
+                <td>Type</td>
+                <td>Undirected</td>
+            </tr>
+            <tr>
+                <td>Number of nodes</td>
+                <td>123456</td>
+            </tr>
+            <tr>
+                <td>Number of edges</td>
+                <td>1234567</td>
+            </tr>
+            <tr>
+                <td>Number of triangles</td>
+                <td>1234567</td>
+            </tr>
+            <tr>
+                <td>Fraction of closed triangles</td>
+                <td>0.066667</td>
+            </tr>
+            <tr>
+                <td>Diameter</td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>Degree centrality</td>
+                <td>N/A</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="plot_loader"></div>
 
 </body>
 
@@ -33,6 +75,8 @@ var current_status = {
     'CONNECTED': false,
     'WAIT': false,
     'PREV_CMD': null,
+    'HIDE_PANEL': false,
+    'HIDE_TABLE': false,
 }
 
 ///////////////////////////////////////////////////
@@ -43,6 +87,10 @@ var load_graph = document.getElementById('load_graph')
 var gen_scale_free = document.getElementById('gen_scale_free')
 var get_properties = document.getElementById('get_properties')
 var plot_graph = document.getElementById('plot_graph')
+var hide_panel = document.getElementById('hide_panel')
+var hide_table = document.getElementById('hide_table')
+var panel_container = document.getElementById('panel_container')
+var prop_table = document.getElementById('prop_table')
 var im_paths = []
 var show_idx = 0
 
@@ -68,18 +116,21 @@ function unwait() {
 }
 
 document.addEventListener('keypress', function (event) {
+    if(im_paths.length == 0)
+        return;
+
     if(event.keyCode == 39) {
         show_idx = (show_idx + 1) % im_paths.length;
-        plot_loader.src = 'file:///' + im_paths[show_idx]
+        plot_loader.style.backgroundImage = 'url(file:///' + im_paths[show_idx] + ')'
     }
     else if(event.keyCode == 37) {
         show_idx = (show_idx + im_paths.length - 1) % im_paths.length
-        plot_loader.src = 'file:///' + im_paths[show_idx]
+        plot_loader.style.backgroundImage = 'url(file:///' + im_paths[show_idx] + ')'
     }
 })
 
 function plot() {
-    plot_loader.src = 'file:///' + im_paths[show_idx]
+    plot_loader.style.backgroundImage = 'url(file:///' + im_paths[show_idx] + ')'
 }
 
 function parse_return(value) {
@@ -94,6 +145,8 @@ function parse_return(value) {
             plot()
             break
         case 'GEN_SCALE_FREE':
+            show_idx = 0
+            im_paths = []
             alert('Scale free graph is loaded!')
             break
         case 'PLOT_GRAPH':
@@ -106,6 +159,26 @@ function parse_return(value) {
 }
 
 ///////////////////////////////////////////////////
+
+hide_panel.addEventListener('click', function (event) {
+    if(current_status['HIDE_PANEL']) {
+        current_status['HIDE_PANEL'] = false
+        panel_container.style.display = 'block'
+    } else {
+        current_status['HIDE_PANEL'] = true
+        panel_container.style.display = 'none'
+    }
+})
+
+hide_table.addEventListener('click', function (event) {
+    if(current_status['HIDE_TABLE']) {
+        current_status['HIDE_TABLE'] = false
+        prop_table.style.display = 'table'
+    } else {
+        current_status['HIDE_TABLE'] = true
+        prop_table.style.display = 'none'
+    }
+})
 
 load_graph.addEventListener('click', function (event) {
     if(!current_status['CONNECTED'])
@@ -120,6 +193,9 @@ load_graph.addEventListener('click', function (event) {
         'cmd': 'LOAD_GRAPH',
         'args': [input_file.value],
     }))
+
+    // Reset plot loader
+    plot_loader.style.backgroundImage = 'none'
 
     wait()
     current_status['PREV_CMD'] = 'LOAD_GRAPH'
@@ -156,6 +232,9 @@ gen_scale_free.addEventListener('click', function (event) {
         'cmd': 'GEN_SCALE_FREE',
         'args': []
     }))
+
+    // Reset plot loader
+    plot_loader.style.backgroundImage = 'none'
 
     wait()
     current_status['PREV_CMD'] = 'GEN_SCALE_FREE'

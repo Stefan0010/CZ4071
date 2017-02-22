@@ -80,7 +80,7 @@ class MyServerProtocol(WebSocketServerProtocol):
 
         elif data['cmd'] == 'GEN_SCALE_FREE':
             print 'Generating scale-free network'
-            self.memory['graph'] = helper.genScaleFree(N=10000, gamma=2.3333)
+            self.memory['graph'] = helper.genScaleFree(N=5000, gamma=2.3333)
 
             print 'Scale-free network is successfully generated'
             self.sendMessage(json.dumps({
