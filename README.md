@@ -2,7 +2,7 @@
 Group project repository for CZ4071-Network Science
 
 ## Assumptions
-* You have included `wgnuplot` (from gnuplot) and `sfdp` (from GraphViz) into your PATH
+* You have included `wgnuplot` (from gnuplot) and `sfdp` (from GraphViz) in your PATH
 * You're running 64-bit python/conda
 
 ## First step
