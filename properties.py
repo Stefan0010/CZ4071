@@ -94,7 +94,7 @@ def plotDegCorr(graph):
 		plt.xticks(np.arange(knn[:, 0].max() + 1))
 
 	plt.xlim(0, knn[:, 0].max())
-	plt.ylim(knn[:, 0].min(), knn[:, 1].max())
+	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
 	plt.xlabel('Degree', fontsize=16)
 	plt.ylabel('k_nn', fontsize=16)
 	plt.yscale('log')
@@ -354,7 +354,8 @@ def getBasicProps(graph):
 		'avg_deg': 2. * graph.GetEdges() / graph.GetNodes(),
 		'gamma': getGamma(graph),
 		'deg_centr': getDegCentr(graph),
-		'num_of_tris': snap.GetTriads(g, -1)
+		'num_tris': snap.GetTriads(graph, -1),
+		'global_cc': snap.GetClustCf(graph, -1),
 	}
 
 if __name__ == '__main__':

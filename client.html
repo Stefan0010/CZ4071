@@ -40,12 +40,12 @@
                 <td id="num_tris">1234567</td>
             </tr>
             <tr>
-                <td>Fraction of closed triangles</td>
-                <td id="frac_tris">0.066667</td>
+                <td>Global Cluster Coefficient</td>
+                <td id="global_cc">0.066667</td>
             </tr>
             <tr>
                 <td>Diameter</td>
-                <td id="diameter">N/A</td>
+                <td id="diameter_ele">N/A</td>
             </tr>
             <tr>
                 <td>Degree centrality</td>
@@ -53,11 +53,11 @@
             </tr>
             <tr>
                 <td>&#9001;k&#9002;</td>
-                <td>N/A</td>
+                <td id="avg_deg">N/A</td>
             </tr>
             <tr>
-                <td>&gamma;</td>
-                <td>N/A</td>
+                <td>&#x3B3;</td>
+                <td id="gamma_ele">N/A</td>
             </tr>
         </tbody>
     </table>
@@ -99,6 +99,17 @@ var hide_panel = document.getElementById('hide_panel')
 var hide_table = document.getElementById('hide_table')
 var panel_container = document.getElementById('panel_container')
 var prop_table = document.getElementById('prop_table')
+var global_cc = document.getElementById('global_cc')
+
+var num_nodes = document.getElementById('num_nodes')
+var num_edges = document.getElementById('num_edges')
+var num_tris = document.getElementById('num_tris')
+var frac_tris = document.getElementById('frac_tris')
+var diameter_ele = document.getElementById('diameter_ele')
+var deg_centr = document.getElementById('deg_centr')
+var avg_deg = document.getElementById('avg_deg')
+var gamma_ele = document.getElementById('gamma_ele')
+
 var im_paths = []
 var show_idx = 0
 
@@ -141,11 +152,22 @@ function plot() {
     plot_loader.style.backgroundImage = "url(file:///" + im_paths[show_idx].replace(/\\/g, '/') + ")"
 }
 
+function load_properties(props) {
+    num_nodes.innerHTML = props['num_nodes']
+    num_edges.innerHTML = props['num_edges']
+    num_tris.innerHTML = props['num_tris']
+    avg_deg.innerHTML = props['avg_deg']
+    deg_centr.innerHTML = props['deg_centr']
+    gamma_ele.innerHTML = props['gamma']
+    global_cc.innerHTML = props['global_cc']
+}
+
 function parse_return(value) {
     switch(current_status['PREV_CMD']) {
         case 'LOAD_GRAPH':
             show_idx = 0
             im_paths = []
+            load_properties(value)
             alert('Graph is loaded!')
             break
         case 'GET_PROPERTIES':
@@ -155,6 +177,7 @@ function parse_return(value) {
         case 'GEN_SCALE_FREE':
             show_idx = 0
             im_paths = []
+            load_properties(value)
             alert('Scale free graph is loaded!')
             break
         case 'PLOT_GRAPH':

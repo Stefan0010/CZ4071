@@ -37,7 +37,7 @@ class MyServerProtocol(WebSocketServerProtocol):
             print 'Graph %s loaded!' % data['args'][0]
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
-                'value': helper.getBasicProps(graph),
+                'value': helper.getBasicProps(self.memory['graph']),
                 }).encode('utf8'), False)
 
         elif data['cmd'] == 'GET_PROPERTIES':
@@ -85,7 +85,7 @@ class MyServerProtocol(WebSocketServerProtocol):
             print 'Scale-free network is successfully generated'
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
-                'value': 0,
+                'value': helper.getBasicProps(self.memory['graph']),
                 }).encode('utf8'), False)
 
         elif data['cmd'] == 'PLOT_GRAPH':
