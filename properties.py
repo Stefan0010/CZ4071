@@ -333,18 +333,26 @@ def numOfTriangles(graph):
 	return result
 
 def getLambda(graph):
-	tmp_arr = []
+	kmin = float('inf')
+	kmax = -float('inf')
+
 	out_arr = snap.TIntPrV()
 	snap.GetDegCnt(graph, out_arr)
 	for item in out_arr:
 		deg = item.GetVal1()
 		num = item.GetVal2()
-		tmp_arr.append(np.full((num,), deg))
 
-	degs = np.concatenate(tmp_arr, axis=0)
-	loc, scale = scipy.stats.expon.fit(degs, floc=degs.min())
+		# DON'T LET kmin = 0
+		# BECAUSE log(0) = INF
+		kmin = max(1, min(kmin, deg))
+		kmax = max(kmax, deg)
 
-	return scale
+	# kmax = kmin * N ^ (1 / (gamma - 1))
+	# kmax / kmin = N ^ (1 / (gamma - 1))
+	# log(kmax) - log(kmin) = log(N) / (gamma - 1)
+	# (gamma - 1) / log(N) = 1 / (log(kmax) - log(kmin))
+	# gamma = 1 + log(N) / (log(kmax) - log(kmin))
+	return 1. + np.log(graph.GetNodes()) / (np.log(kmax) - np.log(kmin))
 
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
