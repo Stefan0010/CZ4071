@@ -37,7 +37,7 @@ class MyServerProtocol(WebSocketServerProtocol):
             print 'Graph %s loaded!' % data['args'][0]
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
-                'value': 0,
+                'value': helper.getBasicProps(graph),
                 }).encode('utf8'), False)
 
         elif data['cmd'] == 'GET_PROPERTIES':

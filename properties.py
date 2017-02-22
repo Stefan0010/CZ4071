@@ -314,25 +314,17 @@ def getDegCentr(graph):
 	# CD(n)
 	nid = snap.GetMxDegNId(graph)
 	CDn = snap.GetDegreeCentr(graph, nid)
-	n = graph.GetNI(snap.GetMxDegNId(graph)).GetDeg()
+	n = graph.GetNodes()
 
-	freeman_nom = 0
+	freeman_nom = 0.
 
 	for NI in graph.Nodes():
 		CDi = snap.GetDegreeCentr(graph, NI.GetId())
 		freeman_nom += CDn - CDi
 
-	return freeman_nom /  ( (n - 1) * (n - 2) )
+	return freeman_nom / (n - 2)
 
-def numOfTriangles(graph):
-	TriadCntV = snap.TIntPrV()
-	snap.GetTriadParticip(graph,TriadCntV)
-	result = 0
-	for pair in TriadCntV:
-		result += pair.Val1()
-	return result
-
-def getLambda(graph):
+def getGamma(graph):
 	kmin = float('inf')
 	kmax = -float('inf')
 
@@ -354,9 +346,20 @@ def getLambda(graph):
 	# gamma = 1 + log(N) / (log(kmax) - log(kmin))
 	return 1. + np.log(graph.GetNodes()) / (np.log(kmax) - np.log(kmin))
 
+def getBasicProps(graph):
+	# Assuming unweighted undirected graph
+	return {
+		'num_nodes': graph.GetNodes(),
+		'num_edges': graph.GetEdges(),
+		'avg_deg': 2. * graph.GetEdges() / graph.GetNodes(),
+		'gamma': getGamma(graph),
+		'deg_centr': getDegCentr(graph),
+		'num_of_tris': snap.GetTriads(g, -1)
+	}
+
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
-	g = genScaleFree(N=5000, gamma=2.1111)
+	g = loadGraph('dumbell.txt')
+	# g = genScaleFree(N=5000, gamma=2.1111)
 	# g = genRandomGraph(N=5000, prob=0.0005)
-	# print plotGraph(g)
-	print getLambda(g)
+	# print snap.GetTriads(g, -1)
