@@ -1,13 +1,16 @@
 import snap
 import os
 import shutil
-
+import matplotlib.pyplot as plt	
+import numpy as np
 def Scc():
 	return snap.PlotSccDistr(Graph, "RandomNetworkScc", "Undirected graph - scc distribution")
 
 def Wcc():
 	return snap.PlotWccDistr(Graph, "RandomNetworkWcc", "Undirected graph - wcc distribution")
 
+# Plot the ranks of the first 10 eigenvalues
+# NOTE: Random graphs are likely to thwart the calculation of eigenvalues
 def EigRank():
 	return snap.PlotEigValRank(Graph, 10, "RandomNetworkEigValRank", "Random Graph Eigenvalue Rank")
 
@@ -68,22 +71,19 @@ prop = ['Scc','Wcc','EigRank','EigDistr','ShortPath','Hops','OutDeg','InDeg','Cl
 
 for item in prop:
 	createFile(item,item,item)
-# createFile('Scc','Scc','Scc')
-# createFile('Wcc','Wcc','Wcc')
-# createFile('EigRank','EigRank','EigRank')
-# createFile('EigDistr','EigDistr','EigDistr')
-# createFile('ShortPath','ShortPath','ShortPath')
-# createFile('Hops','Hops','Hops')
-# createFile('OutDeg','OutDeg','OutDeg')
-# createFile('InDeg','InDeg','InDeg')
-# createFile('Clust','Clust','Clust')
 
+# X =[]
 
-# Plot the ranks of the first 10 eigenvalues
-# NOTE: Random graphs are likely to thwart the calculation of eigenvalues
+# for NI in Graph.Nodes():
+#     DegCentr = snap.GetDegreeCentr(Graph, NI.GetId())
+#     X.append(DegCentr)
 
+# Y = np.arange(10000)
 
+# fig,gr = plt.subplots()
 
+# gr.fill(Y,X,'r')
+# plt.show()
 
 
 

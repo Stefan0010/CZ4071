@@ -308,6 +308,28 @@ def plotOutDegDistr(graph):
 
 	return os.path.abspath(out_fname)
 
+def getDegCentr(graph):
+	# CD(n)
+	nid = snap.GetMxDegNId(graph)
+	CDn = snap.GetDegreeCentr(graph, nid)
+	n = graph.GetNI(snap.GetMxDegNId(graph)).GetDeg()
+
+	freeman_nom = 0
+
+	for NI in graph.Nodes():
+		CDi = snap.GetDegreeCentr(graph, NI.GetId())
+		freeman_nom += CDn - CDi
+
+	return freeman_nom /  ( (n - 1) * (n - 2) )
+
+def numOfTriangles(graph):
+	TriadCntV = snap.TIntPrV()
+	snap.GetTriadParticip(graph,TriadCntV)
+	result = 0
+	for pair in TriadCntV:
+		result += pair.Val1()
+	return result
+
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
 	# g = genScaleFree(N=5000)
