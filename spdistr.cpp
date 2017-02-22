@@ -47,11 +47,11 @@ void bfs(const int &start_node) {
 }
 
 int main(int argc, char* argv[]) {
-	fprintf(stderr, "Usage: %s\n", argv[0]);
-	fputs("OR", stderr);
-	fprintf(stderr, "Usage: %s IN_FILE\n", argv[0]);
-	fputs("OR", stderr);
-	fprintf(stderr, "Usage: %s IN_FILE OUT_FILE\n", argv[0]);
+	//fprintf(stderr, "Usage: %s\n", argv[0]);
+	//fputs("OR", stderr);
+	//fprintf(stderr, "Usage: %s IN_FILE\n", argv[0]);
+	//fputs("OR", stderr);
+	//fprintf(stderr, "Usage: %s IN_FILE OUT_FILE\n", argv[0]);
 	
 	FILE * fin;
 	if(argc == 1) {
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 			max_dist = max(max_dist, dist[u]);
 		}
 		
-		fprintf(stderr, "Completed: %.6f%%\n", (float) (start_node + 1) / num_nodes * 100.);
+		//fprintf(stderr, "Completed: %.6f%%\n", (float) (start_node + 1) / num_nodes * 100.);
 	}
 	
 	FILE * fout;
