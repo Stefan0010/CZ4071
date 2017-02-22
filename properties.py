@@ -30,7 +30,7 @@ def saveGraph(graph):
 	return os.path.abspath(filePath)
 
 def plotGraph(graph):
-	if graph.GetNodes() > 10000:
+	if graph.GetNodes() + graph.GetEdges() > 200000:
 		return None
 
 	filename = saveGraph(graph)
@@ -46,7 +46,7 @@ def plotGraph(graph):
 
 	return os.path.abspath(outfname)
 
-def degCorr(graph):
+def computeDegCorr(graph):
 	knn = {}
 	for u in graph.Nodes():
 		ki = u.GetDeg()
@@ -77,7 +77,7 @@ def degCorr(graph):
 
 def plotDegCorr(graph):
 	out_fname = os.path.join('temp', 'degcorrdistr.png')
-	knn = degCorr(graph)
+	knn = computeDegCorr(graph)
 	plt.clf()
 	plt.figure(1)
 	plt.plot(knn[:, 0], knn[:, 1], '-x')
@@ -92,6 +92,43 @@ def plotDegCorr(graph):
 	# plt.show()
 
 	return os.path.abspath(out_fname)
+
+def plotSPDistr(graph):
+	if graph.GetNodes() * graph.GetEdges() > 100000000:
+		return
+
+	filepath = os.path.join('temp', 'temp_graph.txt')
+	snap.SaveEdgeList(graph, filepath)
+	p_args = [os.path.join('.', 'spdistr'), filepath]
+	p = Popen(p_args, stdout=PIPE)
+
+	temp_list = []
+	while True:
+		line = p.stdin.readline()
+		if line == '':
+			break
+
+		line_splits = line.split(',')
+		dst = int(line_splits[0])
+		num = int(line_splits[1])
+		temp_list.append((dst, num))
+
+	spdistr_arr = np.array(temp_list, dtype=float)
+	spdistr_arr[:, 1] /= 2.
+
+	plt.clf()
+	plt.figure(1)
+	plt.plot(spdistr_arr[:, 0], spdistr_arr[:, 1], '-x')
+	plt.xlim([0, spdistr_arr[:, 0].max()])
+	plt.ylim([0, spdistr_arr[:, 1].max()])
+	plt.xlabel('Shortest path length', fontsize=24)
+	plt.ylabel('Number of nodes', fontsize=24)
+	plt.subplots_adjust(left=0.05, bottom=0.05, right=1., top=1., wspace=0., hspace=0.)
+
+	out_fname = os.path.join('temp', 'spdistr.png')
+	plt.savefig(out_fname, dpi=300, format='png')
+
+	return out_fname
 
 def plotClustCf(graph):
 	path = 'temp/'
@@ -250,4 +287,4 @@ if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
 	# g = genScaleFree(N=10000)
 	g = genRandomGraph(N=10000, prob=0.001)
-	plotDegCorr(g)
+	print plotSPDistr(g)
