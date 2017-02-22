@@ -308,8 +308,17 @@ def plotOutDegDistr(graph):
 
 	return os.path.abspath(out_fname)
 
+def numOfTriangles(graph):
+	TriadCntV = snap.TIntPrV()
+	snap.GetTriadParticip(graph,TriadCntV)
+	result = 0
+	for pair in TriadCntV:
+		result += pair.Val1()
+	return result
+
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
 	# g = genScaleFree(N=5000)
 	g = genRandomGraph(N=5000, prob=0.0005)
-	print plotSPDistr(g)
+	# print plotSPDistr(g)
+	print numOfTriangles(g)
