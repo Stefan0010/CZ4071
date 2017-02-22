@@ -139,7 +139,7 @@ def plotSPDistr(graph):
 	out_fname = os.path.join('temp', 'spdistr.png')
 	plt.savefig(out_fname, dpi=300, format='png')
 
-	return out_fname
+	return os.path.abspath(out_fname)
 
 def plotClustCf(graph):
 	path = 'temp/'
@@ -332,6 +332,6 @@ def numOfTriangles(graph):
 
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
-	# g = genScaleFree(N=5000)
-	g = genRandomGraph(N=5000, prob=0.0005)
-	print plotSPDistr(g)
+	g = genScaleFree(N=5000, gamma=2.7777)
+	# g = genRandomGraph(N=5000, prob=0.0005)
+	print plotGraph(g)

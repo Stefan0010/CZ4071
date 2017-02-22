@@ -51,6 +51,14 @@
                 <td>Degree centrality</td>
                 <td>N/A</td>
             </tr>
+            <tr>
+                <td>&#9001;k&#9002;</td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td>&gamma;</td>
+                <td>N/A</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -121,16 +129,16 @@ document.addEventListener('keypress', function (event) {
 
     if(event.keyCode == 39) {
         show_idx = (show_idx + 1) % im_paths.length;
-        plot_loader.style.backgroundImage = 'url(file:///' + im_paths[show_idx] + ')'
+        plot_loader.style.backgroundImage = "url(file:///" + im_paths[show_idx].replace(/\\/g, '/') + ")"
     }
     else if(event.keyCode == 37) {
         show_idx = (show_idx + im_paths.length - 1) % im_paths.length
-        plot_loader.style.backgroundImage = 'url(file:///' + im_paths[show_idx] + ')'
+        plot_loader.style.backgroundImage = "url(file:///" + im_paths[show_idx].replace(/\\/g, '/') + ")"
     }
 })
 
 function plot() {
-    plot_loader.style.backgroundImage = 'url(file:///' + im_paths[show_idx] + ')'
+    plot_loader.style.backgroundImage = "url(file:///" + im_paths[show_idx].replace(/\\/g, '/') + ")"
 }
 
 function parse_return(value) {
