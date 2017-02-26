@@ -95,7 +95,7 @@ class MyServerProtocol(WebSocketServerProtocol):
 
         elif data['cmd'] == 'GEN_SCALE_FREE_BA':
             print 'Generating scale-free network (BA model)'
-            self.memory['graph'] = helper.genScaleFreeBA(N=5000, k=3)
+            self.memory['graph'] = helper.genScaleFreeBA(N=5000, k=2)
 
             print 'Scale-free network (BA model) is successfully generated'
             self.sendMessage(json.dumps({

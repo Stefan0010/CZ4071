@@ -14,13 +14,13 @@ MAX_XTICKS_NUM = 25
 def loadGraph(fileDir):
 	return snap.LoadEdgeList(snap.PUNGraph, fileDir, 0, 1)
 
-def genScaleFree(N=10000, gamma=2.5):
+def genScaleFree(N=5000, gamma=2.5):
 	return snap.GenRndPowerLaw(N, gamma)
 
-def genRandomGraph(N=10000, prob=0.002):
+def genRandomGraph(N=5000, prob=0.002):
 	return snap.GenRndGnm(snap.PUNGraph, N, int(prob * N * (N - 1) / 2), False)
 
-def genScaleFreeBA(N=10000, k=4):
+def genScaleFreeBA(N=5000, k=2):
 	return snap.GenPrefAttach(N, k)
 
 def saveGraph(graph):
