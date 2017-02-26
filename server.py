@@ -65,17 +65,22 @@ class MyServerProtocol(WebSocketServerProtocol):
             out_arr.append(helper.plotDegCorr(graph))
 
             print 'Plotting shortest path distribution'
-            result = helper.plotSPDistr(graph)
-            if result is None:
+            spdistr_result = helper.plotSPDistr(graph)
+            if spdistr_result is None:
+                diam = None
                 print 'Failed: Graph is too big to plot shortest path distribution'
             else:
-                out_arr.append(result)
+                diam = spdistr_result[1]
+                out_arr.append(spdistr_result[0])
 
             print 'Finished plotting!'
 
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
-                'value': out_arr
+                'value': {
+                    'arr': out_arr,
+                    'diameter': diam,
+                }
                 }).encode('utf8'), False)
 
         elif data['cmd'] == 'GEN_SCALE_FREE':
@@ -86,6 +91,16 @@ class MyServerProtocol(WebSocketServerProtocol):
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
                 'value': helper.getBasicProps(self.memory['graph']),
+                }).encode('utf8'), False)
+
+        elif data['cmd'] == 'GEN_SCALE_FREE_BA':
+            print 'Generating scale-free network (BA model)'
+            self.memory['graph'] = helper.genScaleFreeBA(N=5000, k=3)
+
+            print 'Scale-free network (BA model) is successfully generated'
+            self.sendMessage(json.dumps({
+                'type': 'RETURN',
+                'value': helper.getBasicProps(self.memory['graph'])
                 }).encode('utf8'), False)
 
         elif data['cmd'] == 'PLOT_GRAPH':

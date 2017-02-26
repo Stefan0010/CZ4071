@@ -26,7 +26,7 @@ body {
     box-sizing: border-box;
 }
 
-#input_file, #load_graph, #gen_scale_free, #get_properties, #plot_graph,
+#input_file, #load_graph, #gen_scale_free, #get_properties, #plot_graph, #gen_scale_free_ba,
 #hide_panel, #hide_table {
     display: block;
     width: 100%;

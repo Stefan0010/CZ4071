@@ -13,7 +13,8 @@
         <input id="input_file" type="text" />
         <button id="load_graph">Load graph</button>
         <button id="gen_scale_free">Gen. scale-free network</button>
-        <button id="get_properties">Get properties</button>
+        <button id="gen_scale_free_ba">Gen. scale-free (BA)</button>
+        <button id="get_properties">Plot properties</button>
         <button id="plot_graph">Plot graph</button>
     </div>
     <button id="hide_panel">&hellip;</button>
@@ -122,6 +123,7 @@ function wait() {
     get_properties.disabled = true
     gen_scale_free.disabled = true
     plot_graph.disabled = true
+    gen_scale_free_ba.disabled = true
 }
 
 function unwait() {
@@ -132,6 +134,7 @@ function unwait() {
     get_properties.disabled = false
     gen_scale_free.disabled = false
     plot_graph.disabled = false
+    gen_scale_free_ba.disabled = false
 }
 
 document.addEventListener('keypress', function (event) {
@@ -160,6 +163,7 @@ function load_properties(props) {
     deg_centr.innerHTML = props['deg_centr']
     gamma_ele.innerHTML = props['gamma']
     global_cc.innerHTML = props['global_cc']
+    diameter_ele.innerHTML = 'N/A'
 }
 
 function parse_return(value) {
@@ -171,25 +175,51 @@ function parse_return(value) {
             alert('Graph is loaded!')
             break
         case 'GET_PROPERTIES':
-            im_paths = im_paths.concat(value)
+            im_paths = im_paths.concat(value['arr'])
+            diameter_ele.innerHTML = value['diameter']
             plot()
             break
         case 'GEN_SCALE_FREE':
             show_idx = 0
             im_paths = []
             load_properties(value)
-            alert('Scale free graph is loaded!')
+            alert('Scale-free graph is loaded!')
+            break
+        case 'GEN_SCALE_FREE_BA':
+            show_idx = 0
+            im_paths = []
+            load_properties(value)
+            alert('Scale-free graph (BA model) is loaded!')
             break
         case 'PLOT_GRAPH':
             alert('Graph is successfully plotted!')
             im_paths = im_paths.concat(value)
             plot()
+            break
         default:
             break
     }
 }
 
 ///////////////////////////////////////////////////
+
+gen_scale_free_ba.addEventListener('click', function (event) {
+    if(!current_status['CONNECTED'])
+        return
+
+    if(current_status['WAIT']) {
+        alert('Please wait for previous command to finish!')
+        return
+    }
+
+    ws.send(JSON.stringify({
+        'cmd': 'GEN_SCALE_FREE_BA',
+        'args': []
+    }))
+
+    wait()
+    current_status['PREV_CMD'] = 'GEN_SCALE_FREE_BA'
+})
 
 hide_panel.addEventListener('click', function (event) {
     if(current_status['HIDE_PANEL']) {

@@ -25,7 +25,7 @@ int num_nodes = 0;
 int mapper[2000001];
 vi neighbours[2000001];
 int dist[2000001];
-int cum_dist[2000001];
+ll cum_dist[2000001];
 const int MY_INF = 0x7F7F7F7F;
 int max_dist;
 
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
 		memset(dist, 0x7F, sizeof dist);
 		bfs(start_node);
 		
-		for(int u = 0; u < start_node; ++u) {
+		for(int u = 0; u < num_nodes; ++u) {
 			if(dist[u] == MY_INF || u == start_node)
 				continue;
 			
@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
 	} else fout = fopen(argv[2], "w");
 
 	for(int d = 1; d <= max_dist; ++d) {
-		fprintf(fout, "%d,%d\n", d, cum_dist[d]);
+		fprintf(fout, "%d,%lld\n", d, cum_dist[d]/2LL);
 	}
 	return 0;
 }

@@ -20,6 +20,9 @@ def genScaleFree(N=10000, gamma=2.5):
 def genRandomGraph(N=10000, prob=0.002):
 	return snap.GenRndGnm(snap.PUNGraph, N, int(prob * N * (N - 1) / 2), False)
 
+def genScaleFreeBA(N=10000, k=4):
+	return snap.GenPrefAttach(N, k)
+
 def saveGraph(graph):
 	path = 'temp/'
 	# if os.path.exists(path):
@@ -141,7 +144,7 @@ def plotSPDistr(graph):
 	out_fname = os.path.join('temp', 'spdistr.png')
 	plt.savefig(out_fname, dpi=300, format='png')
 
-	return os.path.abspath(out_fname)
+	return os.path.abspath(out_fname), spdistr_arr[-1, 0]
 
 def plotClustCf(graph):
 	path = 'temp/'
