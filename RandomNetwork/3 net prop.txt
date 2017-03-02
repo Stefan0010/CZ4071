@@ -1,0 +1,15 @@
+Scale free prop:
+1965206 nodes, 5806941 edges
+ configuration model: iter 2845430: edges: 2838049, left: 5804000
+basic props:
+{'global_cc': 0.0030714992020516056, 'num_edges': 2892424, 'num_nodes': 1965206, 'avg_deg': 2.9436344077923637, 'deg_centr': 0.03127567806803079, 'num_tris': 152084L, 'gamma': 2.3142384301577676}
+
+random net prop:
+
+basic props:
+{'global_cc': 9.849930672480572e-07, 'num_edges': 2766607, 'num_nodes': 1965206, 'avg_deg': 2.8155898160294646, 'deg_centr': 6.200077134020363e-06, 'num_tris': 2L, 'gamma': 6.3511222304882953}
+
+BA props:
+
+basic props:
+{'global_cc': 6.981258340386092e-05, 'num_edges': 5895612, 'num_nodes': 1965206, 'avg_deg': 5.999993893769915, 'deg_centr': 0.0019143060570310678, 'num_tris': 1926L, 'gamma': 3.0307935210238104}
