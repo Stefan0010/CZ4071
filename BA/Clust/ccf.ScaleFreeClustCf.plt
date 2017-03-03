@@ -1,8 +1,8 @@
 #
-# Undirected graph - clustering coefficient. G(1965206, 5895612). Average clustering: 0.0001  OpenTriads: 168012934 (1.0000)  ClosedTriads: 1926 (0.0000) (Fri Mar 03 02:04:47 2017)
+# Undirected graph - clustering coefficient. G(1965206, 3930409). Average clustering: 0.0001  OpenTriads: 88827553 (1.0000)  ClosedTriads: 540 (0.0000) (Fri Mar 03 16:13:49 2017)
 #
 
-set title "Undirected graph - clustering coefficient. G(1965206, 5895612). Average clustering: 0.0001  OpenTriads: 168012934 (1.0000)  ClosedTriads: 1926 (0.0000)"
+set title "Undirected graph - clustering coefficient. G(1965206, 3930409). Average clustering: 0.0001  OpenTriads: 88827553 (1.0000)  ClosedTriads: 540 (0.0000)"
 set key bottom right
 set logscale xy 10
 set format x "10^{%L}"

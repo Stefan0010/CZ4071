@@ -251,7 +251,7 @@ def getBasicProps(graph):
 		'global_cc': snap.GetClustCf(graph, -1),
 	}
 
-Graph = snap.GenPrefAttach(1965206, 3)
+Graph = snap.GenPrefAttach(1965206, 2)
 
 # prop = ['Scc','Wcc','InDeg','Clust']
 prop = ['ShortPath']
