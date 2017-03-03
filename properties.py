@@ -148,7 +148,7 @@ def plotSPDistr(graph):
 	plt.xticks( np.arange(spdistr_arr[:, 0].max()+1) )
 	plt.xlabel('Shortest path length', fontsize=16)
 	plt.ylabel('Number of nodes', fontsize=16)
-	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.1, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 	plt.grid(True)
 	out_fname = os.path.join('temp', 'spdistr.png')
 	plt.savefig(out_fname, dpi=300, format='png')
