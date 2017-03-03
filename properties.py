@@ -8,7 +8,7 @@ from subprocess import Popen, PIPE
 
 import scipy.stats
 
-plt.rcParams['figure.figsize'] = (16, 9)
+plt.rcParams['figure.figsize'] = (10, 10)
 MAX_XTICKS_NUM = 25
 
 def loadGraph(fileDir):

@@ -188,7 +188,7 @@ function parse_return(value) {
             break
         case 'GET_PROPERTIES':
             im_paths = im_paths.concat(value['arr'])
-            diameter_ele.innerHTML = value['diameter']
+            diameter_ele.innerHTML = value['diameter'] == null ? 'N/A' : value['diameter']
             plot()
             break
         case 'GEN_SCALE_FREE':
