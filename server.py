@@ -102,6 +102,16 @@ class MyServerProtocol(WebSocketServerProtocol):
                 'value': helper.getBasicProps(self.memory['graph']),
                 }).encode('utf8'), False)
 
+        elif data['cmd'] == 'GEN_RANDOM':
+            print 'Generating random graph'
+            self.memory['graph'] = helper.genRandomGraph()
+
+            print 'Random graph is successfully generated'
+            self.sendMessage(json.dumps({
+                'type': 'RETURN',
+                'value': helper.getBasicProps(self.memory['graph']),
+                }).encode('utf8'), False)
+
         elif data['cmd'] == 'GEN_SCALE_FREE_BA':
             print 'Generating scale-free network (BA model)'
             self.memory['graph'] = helper.genScaleFreeBA(N=5000, k=2)

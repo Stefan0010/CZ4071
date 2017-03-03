@@ -25,7 +25,7 @@ def loadGraph(fileDir):
 def genScaleFree(N=5000, gamma=2.5):
 	return snap.GenRndPowerLaw(N, gamma)
 
-def genRandomGraph(N=5000, prob=0.002):
+def genRandomGraph(N=5000, prob=0.001):
 	return snap.GenRndGnm(snap.PUNGraph, N, int(prob * N * (N - 1) / 2), False)
 
 def genScaleFreeBA(N=5000, k=2):
@@ -48,7 +48,7 @@ def plotGraph(graph):
 		return None
 
 	filename = saveGraph(graph)
-	outfname = 'tempgraph.png'
+	outfname = 'temp/graph.png'
 	p_args = ['sfdp', '-Tpng', '-Gsize="10,10!"', '-Gdpi=72',
 		'-Npenwidth=0.2', '-Nwidth=0.01', '-Nheight=0.01',
 		'-Epenwidth=0.1', '-Nshape=ellipse', '-Nlabel=',

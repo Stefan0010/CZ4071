@@ -17,6 +17,7 @@
     <div id="panel_container">
         <input id="input_file" type="text" placeholder="Path to graph (.txt)" />
         <button id="load_graph">Load graph</button>
+        <button id="gen_random">Gen. random graph</button>
         <button id="gen_scale_free">Gen. scale-free network</button>
         <button id="gen_scale_free_ba">Gen. scale-free (BA)</button>
         <button id="get_properties">Plot properties</button>
@@ -99,6 +100,7 @@ var input_file = document.getElementById('input_file')
 input_file.value = 'L:/roadNet-CA.txt'
 
 var load_graph = document.getElementById('load_graph')
+var gen_random = document.getElementById('gen_random')
 var gen_scale_free = document.getElementById('gen_scale_free')
 var get_properties = document.getElementById('get_properties')
 var plot_graph = document.getElementById('plot_graph')
@@ -127,6 +129,7 @@ function wait() {
     current_status['WAIT'] = true
 
     input_file.disabled = true
+    gen_random.disabled = true
     load_graph.disabled = true
     get_properties.disabled = true
     gen_scale_free.disabled = true
@@ -140,6 +143,7 @@ function unwait() {
     current_status['WAIT'] = false
 
     input_file.disabled = false
+    gen_random.disabled = false
     load_graph.disabled = false
     get_properties.disabled = false
     gen_scale_free.disabled = false
@@ -203,6 +207,12 @@ function parse_return(value) {
             load_properties(value)
             alert('Scale-free graph (BA model) is loaded!')
             break
+        case 'GEN_RANDOM':
+            show_idx = 0
+            im_paths = []
+            load_properties(value)
+            alert('Random graph is loaded!')
+            break
         case 'PLOT_GRAPH':
             alert('Graph is successfully plotted!')
             im_paths = im_paths.concat(value)
@@ -231,6 +241,24 @@ gen_scale_free_ba.addEventListener('click', function (event) {
 
     wait()
     current_status['PREV_CMD'] = 'GEN_SCALE_FREE_BA'
+})
+
+gen_random.addEventListener('click', function (event) {
+    if(!current_status['CONNECTED'])
+        return
+
+    if(current_status['WAIT']) {
+        alert('Please wait for previous command to finish!')
+        return
+    }
+
+    ws.send(JSON.stringify({
+        'cmd': 'GEN_RANDOM',
+        'args': []
+    }))
+
+    wait()
+    current_status['PREV_CMD'] = 'GEN_RANDOM'
 })
 
 hide_panel.addEventListener('click', function (event) {
