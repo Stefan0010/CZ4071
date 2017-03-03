@@ -12,7 +12,15 @@ plt.rcParams['figure.figsize'] = (16, 9)
 MAX_XTICKS_NUM = 25
 
 def loadGraph(fileDir):
-	return snap.LoadEdgeList(snap.PUNGraph, fileDir, 0, 1)
+	if not os.path.isfile(fileDir):
+		return None
+
+	try:
+		graph = snap.LoadEdgeList(snap.PUNGraph, fileDir, 0, 1)
+	except Exception as e:
+		graph = None
+
+	return graph
 
 def genScaleFree(N=5000, gamma=2.5):
 	return snap.GenRndPowerLaw(N, gamma)

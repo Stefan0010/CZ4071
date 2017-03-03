@@ -34,6 +34,15 @@ class MyServerProtocol(WebSocketServerProtocol):
             print 'Loading graph: %s' % data['args'][0]
             self.memory['graph'] = helper.loadGraph(data['args'][0])
 
+            if self.memory['graph'] is None:
+                print 'Graph %s failed to load!' % data['args'][0]
+                self.sendMessage(json.dumps({
+                    'type': 'ERROR',
+                    'value': 'Graph %s failed to load!' % data['args'][0]
+                    }).encode('utf8'), False)
+
+                return
+
             print 'Graph %s loaded!' % data['args'][0]
             self.sendMessage(json.dumps({
                 'type': 'RETURN',
