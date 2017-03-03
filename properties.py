@@ -104,11 +104,12 @@ def plotDegCorr(graph):
 	else:
 		plt.xticks(np.arange(knn[:, 0].max() + 1))
 
-	plt.xlim(0, knn[:, 0].max())
+	# plt.xlim(0, knn[:, 0].max())
 	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
 	plt.xlabel('Degree', fontsize=16)
-	plt.ylabel('k_nn', fontsize=16)
+	plt.ylabel('Degree Correlation', fontsize=16)
 	plt.yscale('log')
+	plt.xscale('log')
 	plt.grid(True)
 	plt.savefig(out_fname, dpi=300, format='png')
 	# plt.show()
