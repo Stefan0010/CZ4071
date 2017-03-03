@@ -138,7 +138,7 @@ def plotSPDistr(graph):
 		temp_list.append((dst, num))
 
 	spdistr_arr = np.array(temp_list, dtype=float)
-	spdistr_arr[:, 1] /= 2.
+	# spdistr_arr[:, 1] /= 2.
 
 	plt.clf()
 	plt.figure(1)
