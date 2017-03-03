@@ -12,4 +12,4 @@ basic props:
 BA props:
 
 basic props:
-{'global_cc': 6.981258340386092e-05, 'num_edges': 5895612, 'num_nodes': 1965206, 'avg_deg': 5.999993893769915, 'deg_centr': 0.0019143060570310678, 'num_tris': 1926L, 'gamma': 3.0307935210238104}
+{'global_cc': 6.43847111459278e-05, 'num_edges': 3930409, 'num_nodes': 1965206, 'avg_deg': 3.9999969468849574, 'deg_centr': 0.0022460783965560977, 'num_tris': 540L, 'gamma': 2.8818898820866048}

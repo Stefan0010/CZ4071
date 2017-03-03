@@ -1,8 +1,8 @@
 #
-# Undirected graph - wcc distribution. G(1965206, 5895612). Largest component has 1.000000 nodes (Fri Mar 03 02:04:35 2017)
+# Undirected graph - wcc distribution. G(1965206, 3930409). Largest component has 1.000000 nodes (Fri Mar 03 16:13:37 2017)
 #
 
-set title "Undirected graph - wcc distribution. G(1965206, 5895612). Largest component has 1.000000 nodes"
+set title "Undirected graph - wcc distribution. G(1965206, 3930409). Largest component has 1.000000 nodes"
 set key bottom right
 set logscale xy 10
 set format x "10^{%L}"
