@@ -361,6 +361,14 @@ def getBasicProps(graph):
 		'global_cc': snap.GetClustCf(graph, -1),
 	}
 
+def numOfTriangles(graph):
+ 	TriadCntV = snap.TIntPrV()
+ 	snap.GetTriadParticip(graph,TriadCntV)
+ 	result = 0
+ 	for pair in TriadCntV:
+ 		result += pair.Val1()
+ 	return result
+
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
 	g = loadGraph('dumbell.txt')
