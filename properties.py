@@ -32,13 +32,13 @@ def genScaleFreeBA(N=5000, k=2):
 	return snap.GenPrefAttach(N, k)
 
 def saveGraph(graph):
-	path = 'temp/'
+	path = 'temp'
 	# if os.path.exists(path):
 	# 	shutil.rmtree(path)
 
 	# os.mkdir(path)
 
-	filePath = path + 'graph.dot'
+	filePath = os.path.join(path, 'graph.dot')
 
 	snap.SaveGViz(graph, filePath)
 	return os.path.abspath(filePath)
@@ -48,7 +48,7 @@ def plotGraph(graph):
 		return None
 
 	filename = saveGraph(graph)
-	outfname = 'temp/graph.png'
+	outfname = 'tempgraph.png'
 	p_args = ['sfdp', '-Tpng', '-Gsize="10,10!"', '-Gdpi=72',
 		'-Npenwidth=0.2', '-Nwidth=0.01', '-Nheight=0.01',
 		'-Epenwidth=0.1', '-Nshape=ellipse', '-Nlabel=',
@@ -155,7 +155,7 @@ def plotSPDistr(graph):
 	return os.path.abspath(out_fname), spdistr_arr[-1, 0]
 
 def plotClustCf(graph):
-	path = 'temp/'
+	path = 'temp'
 
 	# if os.path.exists(path):
 	# 	shutil.rmtree(path)
@@ -167,7 +167,7 @@ def plotClustCf(graph):
 
 	snap.PlotClustCf(graph, fileName, "Clustering Coefficient")
 
-	base = path + 'ccf.' + fileName
+	base = os.path.join(path, 'ccf.' + fileName)
 
 	# ext = ['.plt' , '.tab', '.png']
 	# result = [ os.path.abspath(base + i) for i in ext ]
@@ -178,7 +178,7 @@ def plotClustCf(graph):
 	return os.path.abspath(base + '.png')
 
 def plotSccDistr(graph):
-	path = 'temp/'
+	path = 'temp'
 
 	# if os.path.exists(path):
 	# 	shutil.rmtree(path)
@@ -189,7 +189,7 @@ def plotSccDistr(graph):
 	fileName = 'scc'
 	snap.PlotSccDistr(graph, fileName, "Strongly Connected Component")
 
-	base = path + 'scc.' + fileName
+	base = os.path.join(path, 'scc.' + fileName)
 
 	# ext = ['.plt' , '.tab', '.png']
 	# result = [ os.path.abspath(base + i) for i in ext ]
@@ -200,7 +200,7 @@ def plotSccDistr(graph):
 	return os.path.abspath(base + '.png')
 
 def plotWccDistr(graph):
-	path = 'temp/'
+	path = 'temp'
 
 	# if os.path.exists(path):
 	# 	shutil.rmtree(path)
@@ -211,7 +211,7 @@ def plotWccDistr(graph):
 	fileName = 'wcc'
 	snap.PlotWccDistr(graph, fileName, "Weakly Connected Component")
 
-	base = path + 'wcc.' + fileName
+	base = os.path.join(path, 'wcc.' + fileName)
 
 	# ext = ['.plt' , '.tab', '.png']
 	# result = [ os.path.abspath(base + i) for i in ext ]
@@ -222,101 +222,105 @@ def plotWccDistr(graph):
 	return os.path.abspath(base + '.png')
 
 def plotInDegDistr(graph):
-	# path = 'indeg/'
+	path = 'temp'
 
 	# if os.path.exists(path):
 	# 	shutil.rmtree(path)
 
 	# os.mkdir(path)
-	# os.chdir(path)
+	os.chdir(path)
 
-	# fileName = 'in_deg_distr'
-	# snap.PlotInDegDistr(graph, fileName, "In Degree Distribution")
+	fileName = 'in_deg_distr'
+	snap.PlotInDegDistr(graph, fileName, "In Degree Distribution")
 
-	# base = 'inDeg.' + fileName
+	base = 'inDeg.' + fileName
+	out_fname = os.path.join(path, base + '.png')
+
 	# ext = ['.plt' , '.tab', '.png']
 
-	tmp_arr = []
-	out_arr = snap.TIntPrV()
-	snap.GetInDegCnt(graph, out_arr)
-	for item in out_arr:
-		cnt = item.GetVal2()
-		deg = item.GetVal1()
-		tmp_arr.append((deg, cnt))
-	tmp_arr = np.array(tmp_arr)
+	# tmp_arr = []
+	# out_arr = snap.TIntPrV()
+	# snap.GetInDegCnt(graph, out_arr)
+	# for item in out_arr:
+	# 	cnt = item.GetVal2()
+	# 	deg = item.GetVal1()
+	# 	tmp_arr.append((deg, cnt))
+	# tmp_arr = np.array(tmp_arr)
 
-	out_fname = os.path.join('temp', 'indegdistr.png')
+	# out_fname = os.path.join('temp', 'indegdistr.png')
 
-	plt.clf()
-	plt.figure(1)
-	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
-	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
-	plt.yscale('log')
+	# plt.clf()
+	# plt.figure(1)
+	# plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
+	# plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
+	# plt.yscale('log')
 
-	if tmp_arr[:, 0].max() > MAX_XTICKS_NUM:
-		skip = int(tmp_arr[:, 0].max()) / MAX_XTICKS_NUM
-		plt.xticks( np.arange(0, tmp_arr[:, 0].max() + 1 + skip, skip) )
-	else:
-		plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
+	# if tmp_arr[:, 0].max() > MAX_XTICKS_NUM:
+	# 	skip = int(tmp_arr[:, 0].max()) / MAX_XTICKS_NUM
+	# 	plt.xticks( np.arange(0, tmp_arr[:, 0].max() + 1 + skip, skip) )
+	# else:
+	# 	plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
 
-	plt.xlim(0, tmp_arr[:, 0].max())
-	plt.ylim(0, tmp_arr[:, 1].max())
-	plt.xlabel('In-degrees', fontsize=16)
-	plt.ylabel('Number of nodes', fontsize=16)
-	plt.grid(True)
-	plt.savefig(out_fname, dpi=300, format='png')
+	# plt.xlim(0, tmp_arr[:, 0].max())
+	# plt.ylim(0, tmp_arr[:, 1].max())
+	# plt.xlabel('In-degrees', fontsize=16)
+	# plt.ylabel('Number of nodes', fontsize=16)
+	# plt.grid(True)
+	# plt.savefig(out_fname, dpi=300, format='png')
 
-	# os.chdir('..')
+	os.chdir('..')
 	# return [ os.path.abspath(base + i) for i in ext ]
 
 	return os.path.abspath(out_fname)
 
 def plotOutDegDistr(graph):
-	outdir = 'temp/'
+	outdir = 'temp'
 
 	# if os.path.exists(outdir):
 	# 	shutil.rmtree(outdir)
 
 	# os.mkdir(outdir)
-	# os.chdir(outdir)
+	os.chdir(outdir)
 
-	# fileName = 'out_deg_distr'
-	# snap.PlotOutDegDistr(graph, fileName, "Out Degree Distribution")
+	fileName = 'out_deg_distr'
+	snap.PlotOutDegDistr(graph, fileName, "Out Degree Distribution")
 
-	# base = 'outDeg.' + fileName
+	base = 'outDeg.' + fileName
+	out_fname = os.path.join(path, base + '.png')
+
 	# ext = ['.plt' , '.tab', '.png']
 
-	tmp_arr = []
-	out_arr = snap.TIntPrV()
-	snap.GetOutDegCnt(graph, out_arr)
-	for item in out_arr:
-		cnt = item.GetVal2()
-		deg = item.GetVal1()
-		tmp_arr.append((deg, cnt))
-	tmp_arr = np.array(tmp_arr)
+	# tmp_arr = []
+	# out_arr = snap.TIntPrV()
+	# snap.GetOutDegCnt(graph, out_arr)
+	# for item in out_arr:
+	# 	cnt = item.GetVal2()
+	# 	deg = item.GetVal1()
+	# 	tmp_arr.append((deg, cnt))
+	# tmp_arr = np.array(tmp_arr)
 
-	out_fname = os.path.join('temp', 'outdegdistr.png')
+	# out_fname = os.path.join('temp', 'outdegdistr.png')
 
-	plt.clf()
-	plt.figure(1)
-	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
-	plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
-	plt.yscale('log')
+	# plt.clf()
+	# plt.figure(1)
+	# plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
+	# plt.plot(tmp_arr[:, 0], tmp_arr[:, 1], '-x')
+	# plt.yscale('log')
 
-	if tmp_arr[:, 0].max() > MAX_XTICKS_NUM:
-		skip = int(tmp_arr[:, 0].max()) / MAX_XTICKS_NUM
-		plt.xticks( np.arange(0, tmp_arr[:, 0].max() + 1 + skip, skip) )
-	else:
-		plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
+	# if tmp_arr[:, 0].max() > MAX_XTICKS_NUM:
+	# 	skip = int(tmp_arr[:, 0].max()) / MAX_XTICKS_NUM
+	# 	plt.xticks( np.arange(0, tmp_arr[:, 0].max() + 1 + skip, skip) )
+	# else:
+	# 	plt.xticks(np.arange(tmp_arr[:, 0].max() + 1))
 
-	plt.xlim(0, tmp_arr[:, 0].max())
-	plt.ylim(0, tmp_arr[:, 1].max())
-	plt.xlabel('Out-degrees', fontsize=16)
-	plt.ylabel('Number of nodes', fontsize=16)
-	plt.grid(True)
-	plt.savefig(out_fname, dpi=300, format='png')
+	# plt.xlim(0, tmp_arr[:, 0].max())
+	# plt.ylim(0, tmp_arr[:, 1].max())
+	# plt.xlabel('Out-degrees', fontsize=16)
+	# plt.ylabel('Number of nodes', fontsize=16)
+	# plt.grid(True)
+	# plt.savefig(out_fname, dpi=300, format='png')
 
-	# os.chdir('..')
+	os.chdir('..')
 	# return [ os.path.abspath(base + i) for i in ext ]
 
 	return os.path.abspath(out_fname)
@@ -368,14 +372,6 @@ def getBasicProps(graph):
 		'num_tris': snap.GetTriads(graph, -1),
 		'global_cc': snap.GetClustCf(graph, -1),
 	}
-
-def numOfTriangles(graph):
- 	TriadCntV = snap.TIntPrV()
- 	snap.GetTriadParticip(graph,TriadCntV)
- 	result = 0
- 	for pair in TriadCntV:
- 		result += pair.Val1()
- 	return result
 
 if __name__ == '__main__':
 	# g = loadGraph('roadNet-CA.txt')
