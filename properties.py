@@ -286,7 +286,7 @@ def plotOutDegDistr(graph):
 	snap.PlotOutDegDistr(graph, fileName, "Out Degree Distribution")
 
 	base = 'outDeg.' + fileName
-	out_fname = os.path.join(path, base + '.png')
+	out_fname = os.path.join(outdir, base + '.png')
 
 	# ext = ['.plt' , '.tab', '.png']
 
