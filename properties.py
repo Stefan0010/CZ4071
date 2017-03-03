@@ -8,7 +8,7 @@ from subprocess import Popen, PIPE
 
 import scipy.stats
 
-plt.rcParams['figure.figsize'] = (10, 10)
+plt.rcParams['figure.figsize'] = (11, 10)
 MAX_XTICKS_NUM = 25
 
 def loadGraph(fileDir):
@@ -95,7 +95,7 @@ def plotDegCorr(graph):
 	plt.clf()
 	plt.figure(1)
 	plt.plot(knn[:, 0], knn[:, 1], '-x')
-	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.1, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 
 
 	if knn[:, 0].max() > MAX_XTICKS_NUM:
