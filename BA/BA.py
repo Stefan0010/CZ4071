@@ -13,56 +13,8 @@ def Scc():
 def Wcc():
 	return snap.PlotWccDistr(Graph, "ScaleFreeWcc", "Undirected graph - wcc distribution")
 
-# Plot the ranks of the first 10 eigenvalues
-# NOTE: Random graphs are likely to thwart the calculation of eigenvalues
-# def EigRank():
-# 	return snap.PlotEigValRank(Graph, 10, "ScaleFreeEigValRank", "Random Graph Eigenvalue Rank")
-
-# def EigDistr():
-# 	return snap.PlotEigValDistr(Graph, 10, "ScaleFreeEigValDistr", "Random Graph Eigenvalue Distribution")
-
 def ShortPath():
 	return snap.PlotShortPathDistr(Graph, "ScaleFreeShortestPath", "Undirected graph - shortest path")
-
-# def ShortPath():
-# 	if Graph.GetNodes() * Graph.GetEdges() > 100000000:
-# 		return
-
-# 	filepath = os.path.join('temp', 'temp_graph.txt')
-# 	snap.SaveEdgeList(Graph, filepath)
-# 	p_args = [os.path.join('.', 'spdistr'), filepath]
-# 	p = Popen(p_args, stdout=PIPE)
-
-# 	temp_list = []
-# 	while True:
-# 		line = p.stdout.readline()
-# 		if line == '':
-# 			break
-
-# 		line_splits = line.split(',')
-
-# 		dst = int(line_splits[0])
-# 		num = int(line_splits[1])
-# 		temp_list.append((dst, num))
-
-# 	spdistr_arr = np.array(temp_list, dtype=float)
-# 	spdistr_arr[:, 1] /= 2.
-
-# 	plt.clf()
-# 	plt.figure(1)
-# 	plt.plot(spdistr_arr[:, 0], spdistr_arr[:, 1], '-x')
-# 	plt.xlim([0, spdistr_arr[:, 0].max()])
-# 	plt.ylim([0, spdistr_arr[:, 1].max()])
-# 	plt.xticks( np.arange(spdistr_arr[:, 0].max()+1) )
-# 	plt.xlabel('Shortest path length', fontsize=16)
-# 	plt.ylabel('Number of nodes', fontsize=16)
-# 	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
-# 	plt.grid(True)
-# 	out_fname = os.path.join('temp', 'spdistr.png')
-# 	plt.savefig(out_fname, dpi=300, format='png')
-
-# 	return os.path.abspath(out_fname), spdistr_arr[-1, 0]
-
 
 def computeDegCorr(graph):
 	knn = {}
@@ -93,13 +45,13 @@ def computeDegCorr(graph):
 	knn_ndarr = knn_ndarr[sorted_ks]
 	return knn_ndarr
 
-def DegCorr(graph):
+def plotDegCorr(graph):
 	out_fname = os.path.join('temp', 'degcorrdistr.png')
 	knn = computeDegCorr(graph)
 	plt.clf()
 	plt.figure(1)
 	plt.plot(knn[:, 0], knn[:, 1], '-x')
-	plt.subplots_adjust(left=0.075, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
+	plt.subplots_adjust(left=0.1, bottom=0.075, right=1., top=1., wspace=0., hspace=0.)
 
 
 	if knn[:, 0].max() > MAX_XTICKS_NUM:
@@ -108,33 +60,18 @@ def DegCorr(graph):
 	else:
 		plt.xticks(np.arange(knn[:, 0].max() + 1))
 
-	plt.xlim(0, knn[:, 0].max())
 	plt.ylim(knn[:, 1].min(), knn[:, 1].max())
 	plt.xlabel('Degree', fontsize=16)
-	plt.ylabel('k_nn', fontsize=16)
+	plt.ylabel('Degree Correlation', fontsize=16)
 	plt.yscale('log')
+	plt.xscale('log')
 	plt.grid(True)
 	plt.savefig(out_fname, dpi=300, format='png')
-	# plt.show()
 
 	return os.path.abspath(out_fname)
-# def Hops():
-# 	return snap.PlotHops(Graph, "ScaleFreeHops", "Undirected graph - hops", False,1024)
 
 def OutDeg(graph):
 	outdir = 'temp/'
-
-	# if os.path.exists(outdir):
-	# 	shutil.rmtree(outdir)
-
-	# os.mkdir(outdir)
-	# os.chdir(outdir)
-
-	# fileName = 'out_deg_distr'
-	# snap.PlotOutDegDistr(graph, fileName, "Out Degree Distribution")
-
-	# base = 'outDeg.' + fileName
-	# ext = ['.plt' , '.tab', '.png']
 
 	tmp_arr = []
 	out_arr = snap.TIntPrV()
@@ -176,7 +113,7 @@ def switcher(arg):
 	switcher = {
 		'Scc':Scc,
 		'Wcc':Wcc,
-		'DegCorr':DegCorr,
+		'DegCorr':plotDegCorr,
 		'ShortPath':ShortPath,
 		'OutDeg':OutDeg,
 		'InDeg':InDeg,
@@ -204,7 +141,6 @@ def createFile(path,fileName,arg):
 	return [ os.path.abspath(base + i) for i in ext ]
 
 def getDegCentr(graph):
-	# CD(n)
 	nid = snap.GetMxDegNId(graph)
 	CDn = snap.GetDegreeCentr(graph, nid)
 	n = graph.GetNodes()
@@ -227,16 +163,9 @@ def getGamma(graph):
 		deg = item.GetVal1()
 		num = item.GetVal2()
 
-		# DON'T LET kmin = 0
-		# BECAUSE log(0) = INF
 		kmin = max(1, min(kmin, deg))
 		kmax = max(kmax, deg)
 
-	# kmax = kmin * N ^ (1 / (gamma - 1))
-	# kmax / kmin = N ^ (1 / (gamma - 1))
-	# log(kmax) - log(kmin) = log(N) / (gamma - 1)
-	# (gamma - 1) / log(N) = 1 / (log(kmax) - log(kmin))
-	# gamma = 1 + log(N) / (log(kmax) - log(kmin))
 	return 1. + np.log(graph.GetNodes()) / (np.log(kmax) - np.log(kmin))
 
 def getBasicProps(graph):
@@ -253,28 +182,11 @@ def getBasicProps(graph):
 
 Graph = snap.GenPrefAttach(1965206, 2)
 
-# prop = ['Scc','Wcc','InDeg','Clust']
-prop = ['ShortPath']
+prop = ['Scc','Wcc','InDeg','Clust']
 for item in prop:
 	createFile(item,item,item)
-# 'ShortPath',
-# OutDeg(Graph)
-# DegCorr(Graph)
+OutDeg(Graph)
+plotDegCorr(Graph)
 
-# print getBasicProps(Graph)
-
-
-# X =[]
-
-# for NI in Graph.Nodes():
-#     DegCentr = snap.GetDegreeCentr(Graph, NI.GetId())
-#     X.append(DegCentr)
-
-# Y = np.arange(10000)
-
-# fig,gr = plt.subplots()
-
-# gr.fill(Y,X,'r')
-# plt.show()
-
+print getBasicProps(Graph)
 
