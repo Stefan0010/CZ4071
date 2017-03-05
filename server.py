@@ -1,3 +1,4 @@
+import os
 import sys
 
 from twisted.python import log
@@ -158,6 +159,11 @@ class MyServerProtocol(WebSocketServerProtocol):
     def onClose(self, wasClean, code, reason):
         print("WebSocket connection closed: {0}".format(reason))
 
+try:
+    os.mkdir('temp')
+except OSError as e:
+    if not os.path.isdir('temp'):
+        raise
 
 host = 'localhost'
 port = 8888
